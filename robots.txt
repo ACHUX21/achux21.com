@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://achux.me/sitemap-index.xml
