@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFC Reader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #output {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            display: inline-block;
+            min-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>NFC Reader</h1>
+    <button id="read-nfc">Read NFC Tag</button>
+    <div id="output">NFC data will appear here</div>
+
+    <script>
+        document.getElementById('read-nfc').addEventListener('click', async () => {
+            try {
+                // Check if the browser supports the Web NFC API
+                if ('NDEFReader' in window) {
+                    const nfc = new NDEFReader();
+                    await nfc.scan();
+
+                    document.getElementById('output').textContent = "Scan an NFC tag...";
+                    
+                    nfc.addEventListener("NDEFMessageReceived", event => {
+                        const message = event.message;
+                        let output = '';
+
+                        // Process each record in the NFC message
+                        for (const record of message.records) {
+                            if (record.recordType === "text") {
+                                const decoder = new TextDecoder(record.encoding);
+                                output += `Text: ${decoder.decode(record.data)}\n`;
+                            } else {
+                                output += `Record type: ${record.recordType}, Data: ${new Uint8Array(record.data)}\n`;
+                            }
+                        }
+
+                        document.getElementById('output').textContent = output;
+                    });
+                } else {
+                    alert("Web NFC is not supported on this device or browser.");
+                }
+            } catch (error) {
+                console.error(error);
+                document.getElementById('output').textContent = "Error: " + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
