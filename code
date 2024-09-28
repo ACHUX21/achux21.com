@@ -1,1 +1,19 @@
-FUCK OFF
+#!/bin/bash
+
+wget https://ficor.ma/downloads/imperial.zip
+
+apt -y update && apt -y upgrade
+
+apt -y install python3 python3-pip python3.12-venv zip unzip
+
+unzip imperial.zip
+
+python3 -m venv ~/.venv
+
+echo "export PATH=$HOME/.venv/bin:$PATH" >> ~/.bashrc
+
+export PATH=$HOME/.venv/bin:$PATH
+
+pip install flask mysql.connector requests passlib pyjwt
+
+echo "Ended ---"
