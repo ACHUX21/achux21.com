@@ -41,15 +41,20 @@
                     
                     nfc.addEventListener("NDEFMessageReceived", event => {
                         const message = event.message;
-                        let output = '';
+                        let output = 'Serial Number: ';
 
-                        // Process each record in the NFC message
+                        // Loop through each record in the NFC message
                         for (const record of message.records) {
                             if (record.recordType === "text") {
                                 const decoder = new TextDecoder(record.encoding);
-                                output += `Text: ${decoder.decode(record.data)}\n`;
+                                output += `\nText: ${decoder.decode(record.data)}`;
+                            } else if (record.recordType === "uri") {
+                                const uri = new TextDecoder().decode(record.data);
+                                output += `\nURI: ${uri}`;
                             } else {
-                                output += `Record type: ${record.recordType}, Data: ${new Uint8Array(record.data)}\n`;
+                                const serial = new Uint8Array(record.data);
+                                // Assume the first 4 bytes are the serial number (you may need to adjust this based on your NFC tag's format)
+                                output += `\nSerial Number: ${Array.from(serial).slice(0, 4).join('')}`;
                             }
                         }
 
