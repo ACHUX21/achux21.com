@@ -14,6 +14,6 @@ echo "export PATH=$HOME/.venv/bin:$PATH" >> ~/.bashrc
 
 export PATH=$HOME/.venv/bin:$PATH
 
-pip install flask mysql.connector requests passlib pyjwt
+pip install flask mysql.connector requests passlib pyjwt pytz
 
 echo "Ended ---"
