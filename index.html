@@ -3,262 +3,1638 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Achraf Ouazzani Chahidi // Wired Presence</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Roboto:wght@400&display=swap">
+    <title>ACHRAF // Wired</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌀</text></svg>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+        :root {
+            --deep-purple: #0a0a1a;
+            --dark-purple: #1a1a3a;
+            --mid-purple: #2d2b55;
+            --light-purple: #4a3b8a;
+            --electric-purple: #8a2be2;
+            --neon-purple: #a855f7;
+            --accent-purple: #c084fc;
+            --pink-purple: #e879f9;
+            --terminal: #0684d8;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+            --glow: 0 0 30px rgba(144, 51, 252, 0.4);
+            --strong-glow: 0 0 50px rgba(168, 85, 247, 0.7);
+            --scanline: rgba(168, 85, 247, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--deep-purple);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            cursor: none;
+        }
+
+        /* Mouse Particles Canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--neon-purple);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: screen;
+            transition: transform 0.1s ease;
+        }
+
+        .cursor-ring {
+            position: fixed;
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--accent-purple);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            mix-blend-mode: screen;
+            transition: all 0.2s ease;
+        }
+
+        /* Cyber Grid Background */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                linear-gradient(rgba(168, 85, 247, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(168, 85, 247, 0.1) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 40s linear infinite;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.2;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0) rotateX(60deg); }
+            100% { transform: translate(-60px, -60px) rotateX(60deg); }
+        }
+
+        /* Scanlines */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(transparent 99%, var(--scanline) 99%),
+                repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(168, 85, 247, 0.03) 1px, rgba(168, 85, 247, 0.03) 2px);
+            background-size: 100% 100%, 100% 4px;
+            z-index: -1;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100vh; }
+        }
+
+        /* Purple Nebula Background */
+        .purple-nebula {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(192, 132, 252, 0.08) 0%, transparent 50%);
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 26, 0.85);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav.scrolled {
+            padding: 1rem 3rem;
+            background: rgba(10, 10, 26, 0.95);
+        }
+
+        .nav-logo {
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--neon-purple);
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-logo::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-purple), var(--accent-purple));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-logo:hover::after {
+            transform: scaleX(1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-purple), var(--accent-purple));
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text);
+        }
+
+        .nav-link:hover::before {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--neon-purple);
+        }
+
+        .nav-link.active::before {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '01110000 01110101 01110010 01110000 01101100 01100101';
+            position: absolute;
+            top: 20%;
+            left: 0;
+            width: 100%;
+            font-size: 1rem;
+            color: var(--mid-purple);
+            opacity: 0.3;
+            letter-spacing: 12px;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid var(--neon-purple);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+            color: var(--accent-purple);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 5rem);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            position: relative;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--neon-purple), var(--accent-purple), var(--pink-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            color: var(--accent-purple);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 2px;
+        }
+
+        .hero-description {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+
+        .terminal-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2.5rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid var(--neon-purple);
+            border-radius: 4px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1rem;
+            font-family: 'Share Tech Mono', monospace;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terminal-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .terminal-btn::before {
+            content: '$';
+            color: var(--terminal);
+        }
+
+        .terminal-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .terminal-btn:hover::after {
+            left: 100%;
+        }
+
+        /* Purple Glow Sections */
+        .section-glow {
+            position: relative;
+            min-height: 100vh;
+            padding: 8rem 2rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.1);
+        }
+
+        .section-glow:nth-child(even) {
+            background: linear-gradient(to bottom, transparent, rgba(26, 26, 58, 0.3));
+        }
+
+        .section-title {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--neon-purple);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-purple), transparent);
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .terminal-text {
+            color: var(--text);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .terminal-text::before {
+            content: '>';
+            color: var(--terminal);
+            margin-right: 1rem;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .purple-hologram {
+            height: 300px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(192, 132, 252, 0.1));
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .purple-hologram::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.2), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .hologram-icon {
+            font-size: 4rem;
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: rgba(26, 26, 58, 0.5);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 12px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-category:hover {
+            border-color: var(--neon-purple);
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+        }
+
+        .skill-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-purple), var(--accent-purple));
+        }
+
+        .skill-category h3 {
+            color: var(--accent-purple);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .skill-tag {
+            padding: 0.6rem 1.2rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--accent-purple);
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(168, 85, 247, 0.2);
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .project-card {
+            background: rgba(26, 26, 58, 0.5);
+            border: 1px solid rgba(138, 43, 226, 0.2);
+            border-radius: 12px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            border-color: var(--electric-purple);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(138, 43, 226, 0.3);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .project-card:hover::before {
+            left: 100%;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-icon {
+            color: var(--electric-purple);
+            font-size: 2.5rem;
+        }
+
+        .project-links a {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .project-links a:hover {
+            color: var(--electric-purple);
+        }
+
+        .project-title {
+            color: var(--text);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .project-description {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .project-tag {
+            padding: 0.4rem 1rem;
+            background: rgba(138, 43, 226, 0.1);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--electric-purple);
+        }
+
+        /* Broadcasts Section */
+        .broadcast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .broadcast-card {
+            background: rgba(26, 26, 58, 0.5);
+            border: 1px solid rgba(17, 0, 255, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            position: relative;
+        }
+
+        .broadcast-card:hover {
+            border-color: var(--terminal);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(132, 0, 255, 0.2);
+        }
+
+        .broadcast-image {
+            height: 200px;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.5), rgba(168, 85, 247, 0.5));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .broadcast-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .broadcast-card:hover .broadcast-image::before {
+            transform: translateX(100%);
+        }
+
+        .broadcast-content {
+            padding: 1.5rem;
+        }
+
+        .broadcast-title {
+            color: var(--text);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .broadcast-title.glitch-first-place {
+            color: var(--terminal);
+        }
+
+        .broadcast-title.glitch-second-place {
+            color: var(--pink-purple);
+        }
+
+        .broadcast-title.glitch-hosting {
+            color: var(--accent-purple);
+        }
+
+        .broadcast-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 255, 136, 0.1);
+        }
+
+        .broadcast-footer span {
+            color: var(--terminal);
+            font-size: 0.9rem;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .broadcast-footer i {
+            color: var(--terminal);
+            transition: transform 0.3s ease;
+        }
+
+        .broadcast-card:hover .broadcast-footer i {
+            transform: translateX(5px);
+        }
+
+        /* Timeline Section */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--neon-purple), transparent);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            margin-bottom: 3rem;
+            padding-right: 3rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            margin-left: 50%;
+            padding-left: 3rem;
+            padding-right: 0;
+        }
+
+        .timeline-node {
+            position: absolute;
+            right: -11px;
+            top: 0;
+            width: 22px;
+            height: 22px;
+            background: var(--deep-purple);
+            border: 3px solid var(--neon-purple);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--neon-purple);
+        }
+
+        .timeline-item:nth-child(even) .timeline-node {
+            right: auto;
+            left: -11px;
+        }
+
+        .timeline-item.active .timeline-node {
+            background: var(--neon-purple);
+            animation: node-pulse 2s infinite;
+        }
+
+        @keyframes node-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(168, 85, 247, 0); }
+        }
+
+        .timeline-content {
+            background: rgba(26, 26, 58, 0.5);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            border-color: var(--neon-purple);
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+        }
+
+        .timeline-date {
+            color: var(--neon-purple);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .timeline-title {
+            color: var(--text);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-role {
+            color: var(--accent-purple);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-desc {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-list {
+            list-style: none;
+        }
+
+        .contact-list li {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(168, 85, 247, 0.1);
+            border-radius: 10px;
+            color: var(--neon-purple);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-list li:hover .contact-icon {
+            background: rgba(168, 85, 247, 0.2);
+            transform: scale(1.1);
+        }
+
+        .contact-list a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .contact-list a:hover {
+            color: var(--neon-purple);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-input {
+            padding: 1.2rem;
+            background: rgba(26, 26, 58, 0.5);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--neon-purple);
+            box-shadow: var(--glow);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            padding: 1.2rem 2.5rem;
+            background: linear-gradient(135deg, var(--neon-purple), var(--accent-purple));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--strong-glow);
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 4rem 0 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(168, 85, 247, 0.2);
+            margin-top: 4rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(168, 85, 247, 0.1);
+            border-radius: 10px;
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            color: var(--neon-purple);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-family: 'Share Tech Mono', monospace;
+            margin-top: 2rem;
+        }
+
+        .lain-quote {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            font-style: italic;
+            border-top: 1px solid rgba(168, 85, 247, 0.1);
+            border-bottom: 1px solid rgba(168, 85, 247, 0.1);
+            margin: 4rem 0;
+            position: relative;
+        }
+
+        .lain-quote::before, .lain-quote::after {
+            content: '"';
+            color: var(--neon-purple);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .about-grid, .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 60px;
+                padding-right: 0;
+            }
+            
+            .timeline-item:nth-child(even) {
+                margin-left: 0;
+                padding-left: 60px;
+            }
+            
+            .timeline-node {
+                left: 20px !important;
+                right: auto !important;
+            }
+            
+            .nav {
+                padding: 1rem;
+            }
+            
+            .hero {
+                padding: 0 1rem;
+            }
+            
+            .section-glow {
+                padding: 6rem 1rem;
+            }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Utility Classes */
+        .instruction-text {
+            text-align: center;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+            font-family: 'Share Tech Mono', monospace;
+        }
+    </style>
 </head>
 <body>
-    <div id="preloader">
-        <div class="loader-text" id="loader-status">CONNECTING TO THE WIRED...</div>
-    </div>
+    <canvas id="particles-canvas"></canvas>
+    <div class="purple-nebula"></div>
+    <div class="cyber-grid"></div>
+    
+    <div class="cursor"></div>
+    <div class="cursor-ring"></div>
 
-    <header id="header">
+    <nav class="nav">
+        <a href="#" class="nav-logo">ACHUX<span style="color: var(--terminal);">21</span></a>
+        <div class="nav-links">
+            <a href="#about" class="nav-link active">/about</a>
+            <a href="#skills" class="nav-link">/skills</a>
+            <a href="#projects" class="nav-link">/projects</a>
+            <a href="#broadcasts" class="nav-link">/broadcasts</a>
+            <a href="#timeline" class="nav-link">/timeline</a>
+            <a href="#contact" class="nav-link">/contact</a>
+        </div>
+    </nav>
+
+    <section class="hero">
         <div class="container">
-            <nav>
-                <div class="logo"><a href="#"><span class="glitch-hover" data-text="A">A</span>CHUX<span class="glitch-hover" data-text="21">21</span></a></div>
-                <div class="nav-links">
-                    <a href="#about" class="active">/about</a>
-                    <a href="#skills">/skills</a>
-                    <a href="#projects">/projects</a>
-                    <a href="#broadcasts">/broadcasts</a>
-                    <a href="#timeline">/timeline</a>
-                    <a href="#contact">/contact</a>
-                </div>
-                <div class="hamburger" id="hamburger">
-                    <span></span><span></span><span></span>
-                </div>
-            </nav>
+            <div class="hero-content">
+                <div class="hero-badge">PRESENT DAY, PRESENT TIME</div>
+                <h1 class="hero-title">
+                    <span>ACHRAF<br>OUAZZANI<br>CHAHIDI</span>
+                </h1>
+                <div class="hero-subtitle">>> Offensive Security Engineer</div>
+                <p class="hero-description">
+                    An identity navigating the layers between software engineering and offensive security. 
+                    I exist to deconstruct digital structures, finding meaning in their vulnerabilities.
+                </p>
+                <a href="#projects" class="terminal-btn">
+                    <span>ls -la ./projects</span>
+                </a>
+            </div>
         </div>
-    </header>
+    </section>
 
-    <div class="mobile-menu" id="mobile-menu">
-        <button class="close-menu" id="close-menu"><i class="fas fa-times"></i></button>
-        <div class="mobile-nav-links">
-            <a href="#about">/about</a>
-            <a href="#skills">/skills</a>
-            <a href="#projects">/projects</a>
-            <a href="#broadcasts">/broadcasts</a>
-            <a href="#timeline">/timeline</a>
-            <a href="#contact">/contact</a>
+    <section id="about" class="section-glow">
+        <div class="container">
+            <h2 class="section-title">/usr/achraf/about.md</h2>
+            <div class="about-grid">
+                <div>
+                    <p class="terminal-text">My connection to the digital world began at 17, a curiosity for cybersecurity pulling me into the command lines and networks of platforms like TryHackMe. I built a foundational understanding of penetration testing, tools, and methodologies.</p>
+                    <p class="terminal-text">To go deeper, I enrolled in the ALX Software Engineering program. Here, I learned the language of the machine, honing skills in low-level C programming by creating complex projects from scratch, like a custom printf and a functional shell.</p>
+                    <p class="terminal-text">Now, I merge my developer core with my security focus. An active CTF player, a certified penetration tester (eJPT), and a community leader for the Hack The Box Casablanca meetup, I find my purpose in the space between building and breaking code.</p>
+                </div>
+                <div class="purple-hologram">
+                    <div class="hologram-icon">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="color: var(--accent-purple); font-size: 1.2rem; margin-bottom: 0.5rem;">
+                            ACHRAF OUAZZANI CHAHIDI
+                        </div>
+                        <div style="color: var(--text-dim); font-size: 0.9rem;">
+                            Offensive Security | Software Engineering
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <main>
-        <section class="hero">
-            <div class="container">
-                <div class="hero-content">
-                    <div class="hero-subtitle glitch-hover" data-text="> Present day, present time.">> Present day, present time.</div>
-                    <h1 class="hero-title">
-                        <span id="typing-text"></span><span class="typing-cursor"></span>
-                    </h1>
-                    <p class="hero-description">
-                        An identity navigating the layers between software engineering and offensive security. I exist to deconstruct digital structures, finding meaning in their vulnerabilities.
-                    </p>
-                    <a href="#projects" class="btn">
-                        <span>$ ls -la ./projects</span>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section id="about">
-            <div class="container">
-                <div class="section-window">
-                    <div class="window-header">
-                        <div class="window-title">/usr/achraf/about.md</div>
-                        <div class="window-controls"><span></span><span></span><span></span></div>
-                    </div>
-                    <div class="about-grid">
-                        <div class="about-content">
-                            <p>My connection to the digital world began at 17, a curiosity for cybersecurity pulling me into the command lines and networks of platforms like TryHackMe. I built a foundational understanding of penetration testing, tools, and methodologies.</p>
-                            <p>To go deeper, I enrolled in the ALX Software Engineering program. Here, I learned the language of the machine, honing skills in low-level C programming by creating complex projects from scratch, like a custom printf and a functional shell.</p>
-                            <p>Now, I merge my developer core with my security focus. An active CTF player, a certified penetration tester (eJPT), and a community leader for the Hack The Box Casablanca meetup, I find my purpose in the space between building and breaking code.</p>
-                        </div>
-                        <div class="about-image-wrapper">
-                            <div class="about-image" hidden>
-                                <img src="https://media.licdn.com/dms/image/v2/D4E03AQHGQWRh1soGnQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1707362106215?e=1761177600&v=beta&t=3MrSt8qQnXa5KI-yfmZ6PONyJR8ScD4TTPzti_diAu8" alt="Achraf Ouazzani Chahidi">
-                            </div>
-                        </div>
+    <section id="skills" class="section-glow">
+        <div class="container">
+            <h2 class="section-title">/wired/skills.conf</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>[ Offensive Security ]</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">Penetration Testing</span>
+                        <span class="skill-tag">Web Exploitation</span>
+                        <span class="skill-tag">Vulnerability Assessment</span>
+                        <span class="skill-tag">Bug Bounty Hunting</span>
+                        <span class="skill-tag">OWASP Top 10</span>
+                        <span class="skill-tag">Privilege Escalation</span>
+                        <span class="skill-tag">Burp Suite</span>
+                        <span class="skill-tag">Nmap & Metasploit</span>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section id="skills">
-            <div class="container">
-                 <div class="section-window">
-                    <div class="window-header"><div class="window-title">/wired/skills.conf</div></div>
-                    <div class="skills-grid">
-                        <div class="skill-category">
-                            <h3>[ Offensive Security ]</h3>
-                            <div class="skill-list"><span class="skill-tag">Penetration Testing</span><span class="skill-tag">Web Exploitation</span><span class="skill-tag">Vulnerability Assessment</span><span class="skill-tag">Bug Bounty Hunting</span><span class="skill-tag">OWASP Top 10</span><span class="skill-tag">Privilege Escalation</span><span class="skill-tag">Burp Suite</span><span class="skill-tag">Nmap & Metasploit</span></div>
-                        </div>
-                        <div class="skill-category">
-                            <h3>[ Development & Scripting ]</h3>
-                             <div class="skill-list"><span class="skill-tag">C</span><span class="skill-tag">Python</span><span class="skill-tag">Bash</span><span class="skill-tag">JavaScript</span><span class="skill-tag">Automation Scripting</span><span class="skill-tag">System Programming</span><span class="skill-tag">Git & GitHub</span><span class="skill-tag">Docker</span></div>
-                        </div>
-                        <div class="skill-category">
-                            <h3>[ Defensive Security ]</h3>
-                            <div class="skill-list"><span class="skill-tag">SIEM Tools</span><span class="skill-tag">Incident Response</span><span class="skill-tag">Log Analysis</span><span class="skill-tag">Firewall Management</span><span class="skill-tag">Endpoint Security</span><span class="skill-tag">Threat Hunting</span><span class="skill-tag">Malware Analysis</span></div>
-                        </div>
-                        <div class="skill-category">
-                            <h3>[ Networking & Infrastructure ]</h3>
-                            <div class="skill-list"><span class="skill-tag">TCP/IP Suite</span><span class="skill-tag">OSI Model</span><span class="skill-tag">Routing & Switching</span><span class="skill-tag">CCNA Fundamentals</span><span class="skill-tag">Security Protocols</span><span class="skill-tag">Virtualization</span><span class="skill-tag">GNS3 & Packet Tracer</span><span class="skill-tag">Linux Administration</span></div>
-                        </div>
+                
+                <div class="skill-category">
+                    <h3>[ Development & Scripting ]</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">C</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Bash</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Automation Scripting</span>
+                        <span class="skill-tag">System Programming</span>
+                        <span class="skill-tag">Git & GitHub</span>
+                        <span class="skill-tag">Docker</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3>[ Defensive Security ]</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">SIEM Tools</span>
+                        <span class="skill-tag">Incident Response</span>
+                        <span class="skill-tag">Log Analysis</span>
+                        <span class="skill-tag">Firewall Management</span>
+                        <span class="skill-tag">Endpoint Security</span>
+                        <span class="skill-tag">Threat Hunting</span>
+                        <span class="skill-tag">Malware Analysis</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3>[ Networking & Infrastructure ]</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">TCP/IP Suite</span>
+                        <span class="skill-tag">OSI Model</span>
+                        <span class="skill-tag">Routing & Switching</span>
+                        <span class="skill-tag">CCNA Fundamentals</span>
+                        <span class="skill-tag">Security Protocols</span>
+                        <span class="skill-tag">Virtualization</span>
+                        <span class="skill-tag">GNS3 & Packet Tracer</span>
+                        <span class="skill-tag">Linux Administration</span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="projects">
-            <div class="container">
-                <div class="section-window">
-                    <div class="window-header"><div class="window-title">/home/achraf/projects</div></div>
-                    <div class="projects-grid">
-                        <div class="project-card">
-                            <div class="project-header"><div class="project-icon"><i class="fas fa-terminal"></i></div><div class="project-links"><a href="https://github.com/ACHUX21/simple_shell" target="_blank" aria-label="Simple Shell GitHub"><i class="fab fa-github"></i></a></div></div>
-                            <h3 class="project-title">Simple Shell</h3><p class="project-description">A custom shell built in C, handling commands, arguments, and process management. A core ALX project.</p><div class="project-tags"><span class="project-tag">C</span><span class="project-tag">System Programming</span></div>
+    <section id="projects" class="section-glow">
+        <div class="container">
+            <h2 class="section-title">/home/achraf/projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon"><i class="fas fa-terminal"></i></div>
+                        <div class="project-links">
+                            <a href="https://github.com/ACHUX21/simple_shell" target="_blank"><i class="fab fa-github"></i></a>
                         </div>
-                        <div class="project-card">
-                           <div class="project-header"><div class="project-icon"><i class="fas fa-robot"></i></div><div class="project-links"><a href="https://github.com/ACHUX21" target="_blank" aria-label="Automated Security Tools GitHub"><i class="fab fa-github"></i></a></div></div>
-                            <h3 class="project-title">Automated Security Tools</h3><p class="project-description">Python and Bash scripts to automate vulnerability analysis, reconnaissance, and exploit detection.</p><div class="project-tags"><span class="project-tag">Python</span><span class="project-tag">Automation</span></div>
+                    </div>
+                    <h3 class="project-title">Simple Shell</h3>
+                    <p class="project-description">A custom shell built in C, handling commands, arguments, and process management. A core ALX project.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">C</span>
+                        <span class="project-tag">System Programming</span>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon"><i class="fas fa-robot"></i></div>
+                        <div class="project-links">
+                            <a href="https://github.com/ACHUX21" target="_blank"><i class="fab fa-github"></i></a>
                         </div>
-                        <div class="project-card">
-                           <div class="project-header"><div class="project-icon"><i class="fas fa-align-left"></i></div><div class="project-links"><a href="https://github.com/ACHUX21/printf" target="_blank" aria-label="Custom Printf GitHub"><i class="fab fa-github"></i></a></div></div>
-                            <h3 class="project-title">Custom _printf Function</h3><p class="project-description">A complete C recreation of the printf function, managing format specifiers, flags, and data types.</p><div class="project-tags"><span class="project-tag">C</span><span class="project-tag">Low-Level</span></div>
+                    </div>
+                    <h3 class="project-title">Automated Security Tools</h3>
+                    <p class="project-description">Python and Bash scripts to automate vulnerability analysis, reconnaissance, and exploit detection.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Python</span>
+                        <span class="project-tag">Automation</span>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon"><i class="fas fa-align-left"></i></div>
+                        <div class="project-links">
+                            <a href="https://github.com/ACHUX21/printf" target="_blank"><i class="fab fa-github"></i></a>
                         </div>
-                        <div class="project-card">
-                           <div class="project-header"><div class="project-icon"><i class="fas fa-flask"></i></div><div class="project-links"><a href="https://github.com/ACHUX21/SEINFA-Project" target="_blank" aria-label="Imperial Petroleum POS GitHub"><i class="fab fa-github"></i></a></div></div>
-                            <h3 class="project-title">Imperial Petroleum POS</h3><p class="project-description">A web-based Point-of-Sale platform for gas station management built with Flask, MySQL, and Jinja2.</p><div class="project-tags"><span class="project-tag">Flask</span><span class="project-tag">Web Dev</span></div>
+                    </div>
+                    <h3 class="project-title">Custom _printf Function</h3>
+                    <p class="project-description">A complete C recreation of the printf function, managing format specifiers, flags, and data types.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">C</span>
+                        <span class="project-tag">Low-Level</span>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon"><i class="fas fa-flask"></i></div>
+                        <div class="project-links">
+                            <a href="https://github.com/ACHUX21/SEINFA-Project" target="_blank"><i class="fab fa-github"></i></a>
                         </div>
+                    </div>
+                    <h3 class="project-title">Imperial Petroleum POS</h3>
+                    <p class="project-description">A web-based Point-of-Sale platform for gas station management built with Flask, MySQL, and Jinja2.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Flask</span>
+                        <span class="project-tag">Web Dev</span>
                     </div>
                 </div>
             </div>
-        </section>
-        <section id="broadcasts">
-    <div class="container">
-        <div class="section-window">
-            <div class="window-header"><div class="window-title">/net/broadcasts</div></div>
-            <p class="instruction-text">
-                CTF achievements, security insights, and community highlights from the Wired.
-            </p>
+        </div>
+    </section>
+
+    <section id="broadcasts" class="section-glow">
+        <div class="container">
+            <h2 class="section-title">/net/broadcasts</h2>
+            <p class="instruction-text">CTF achievements, security insights, and community highlights from the Wired.</p>
             <div class="broadcast-grid">
-                
-                <a href="https://lnkd.in/p/eR5RrN28" target="_blank" class="linkedin-card">
-                    <div class="linkedin-card-image" style="background-image: url('images/ensa_kech.jpg');"></div>
-                    <div class="linkedin-card-content">
-                        <h3 class="linkedin-card-title glitch-first-place">AISEC CTF 2025 - 1st Place</h3>
-                        <div class="linkedin-card-footer">
-                            <span>View on LinkedIn</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                <a href="https://lnkd.in/p/eR5RrN28" target="_blank" class="broadcast-card">
+                    <div class="broadcast-image">
+                        <img src="images/ensa_kech.jpg" alt="AISEC CTF 2025" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
-                </a>
-
-                <a href="https://lnkd.in/p/eMeuEvzd" target="_blank" class="linkedin-card">
-                    <div class="linkedin-card-image" style="background-image: url('images/ideh.jpg');"></div>
-                    <div class="linkedin-card-content">
-                        <h3 class="linkedin-card-title glitch-first-place">IDEHv6 CTF 2025 - 1st Place</h3>
-                        <div class="linkedin-card-footer">
+                    <div class="broadcast-content">
+                        <h3 class="broadcast-title glitch-first-place">AISEC CTF 2025 - 1st Place</h3>
+                        <div class="broadcast-footer">
                             <span>View on LinkedIn</span>
                             <i class="fas fa-arrow-right"></i>
                         </div>
                     </div>
                 </a>
                 
-                <a href="https://lnkd.in/p/eFRsxUCH" target="_blank" class="linkedin-card">
-                    <div class="linkedin-card-image" style="background-image: url('images/ensias.jpg');"></div>
-                    <div class="linkedin-card-content">
-                        <h3 class="linkedin-card-title glitch-first-place">MCSCv12 CTF 2025 - 1st Place</h3> 
-                        <div class="linkedin-card-footer">
+                <a href="https://lnkd.in/p/eMeuEvzd" target="_blank" class="broadcast-card">
+                    <div class="broadcast-image">
+                        <img src="images/ideh.jpg" alt="IDEHv6 CTF 2025" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="broadcast-content">
+                        <h3 class="broadcast-title glitch-first-place">IDEHv6 CTF 2025 - 1st Place</h3>
+                        <div class="broadcast-footer">
                             <span>View on LinkedIn</span>
                             <i class="fas fa-arrow-right"></i>
                         </div>
                     </div>
                 </a>
-
-                <a href="https://lnkd.in/p/eySUR32K" target="_blank" class="linkedin-card">
-                    <div class="linkedin-card-image" style="background-image: url('images/odyssey.jpg');"></div>
-                    <div class="linkedin-card-content">
-                        <h3 class="linkedin-card-title glitch-second-place">Cyber Odyssey CTF 2024 - 2nd Place</h3>
-                        <div class="linkedin-card-footer">
+                
+                <a href="https://lnkd.in/p/eFRsxUCH" target="_blank" class="broadcast-card">
+                    <div class="broadcast-image">
+                        <img src="images/ensias.jpg" alt="MCSCv12 CTF 2025" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="broadcast-content">
+                        <h3 class="broadcast-title glitch-first-place">MCSCv12 CTF 2025 - 1st Place</h3>
+                        <div class="broadcast-footer">
                             <span>View on LinkedIn</span>
                             <i class="fas fa-arrow-right"></i>
                         </div>
                     </div>
                 </a>
-                <a href="https://lnkd.in/p/e9akjiwf" target="_blank" class="linkedin-card">
-                    <div class="linkedin-card-image" style="background-image: url('images/org_ensa.jpg');"></div>
-                    <div class="linkedin-card-content">
-                        <h3 class="linkedin-card-title glitch-hosting">0xGCD CTF 2024 - Hosting</h3> 
-                        <div class="linkedin-card-footer">
+                
+                <a href="https://lnkd.in/p/eySUR32K" target="_blank" class="broadcast-card">
+                    <div class="broadcast-image">
+                        <img src="images/odyssey.jpg" alt="Cyber Odyssey CTF 2024" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="broadcast-content">
+                        <h3 class="broadcast-title glitch-second-place">Cyber Odyssey CTF 2024 - 2nd Place</h3>
+                        <div class="broadcast-footer">
                             <span>View on LinkedIn</span>
                             <i class="fas fa-arrow-right"></i>
                         </div>
                     </div>
                 </a>
-
+                
+                <a href="https://lnkd.in/p/e9akjiwf" target="_blank" class="broadcast-card">
+                    <div class="broadcast-image">
+                        <img src="images/ensa_kech.jpg" alt="0xGCD CTF 2024" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="broadcast-content">
+                        <h3 class="broadcast-title glitch-hosting">0xGCD CTF 2024 - Hosting</h3>
+                        <div class="broadcast-footer">
+                            <span>View on LinkedIn</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
+    </section>
+
+    <section id="timeline" class="section-glow">
+        <div class="container">
+            <h2 class="section-title">/var/log/timeline.log</h2>
+            <div class="timeline">
+                <div class="timeline-item future">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Sep 2025 - Jun 2029 (Future)</div>
+                        <h3 class="timeline-title">Dalian Polytechnic University</h3>
+                        <div class="timeline-role">Bachelor's in Computer Science</div>
+                        <p class="timeline-desc">Pursuing a comprehensive bachelor's degree in Computer Science.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item active">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Feb 2025 - Present</div>
+                        <h3 class="timeline-title">CTF Team (AKASEC)</h3>
+                        <div class="timeline-role">Player</div>
+                        <p class="timeline-desc">Competing in CTFs, specializing in web exploitation and reverse engineering.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item active">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Jan 2025 - Present</div>
+                        <h3 class="timeline-title">Hack The Box</h3>
+                        <div class="timeline-role">Meetup Host Manager (Casablanca)</div>
+                        <p class="timeline-desc">Organizing local cybersecurity community events and workshops.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Sep 2023 - Jul 2025</div>
+                        <h3 class="timeline-title">Cybersecurity Specialist Program</h3>
+                        <div class="timeline-role">ISGI - Technical Specialist</div>
+                        <p class="timeline-desc">Completed an intensive 2-year program specializing in network security, ethical hacking methodologies, and digital forensics techniques. (French language)</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Jan 2025 - Mar 2025</div>
+                        <h3 class="timeline-title">Swift IT</h3>
+                        <div class="timeline-role">Junior Penetration Tester</div>
+                        <p class="timeline-desc">Performed penetration tests and developed custom security tools.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Apr 2024 - Aug 2024</div>
+                        <h3 class="timeline-title">Bugcrowd (Freelance)</h3>
+                        <div class="timeline-role">Bug Hunter</div>
+                        <p class="timeline-desc">Identified and reported web application security vulnerabilities.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Mar 2023 - Oct 2024</div>
+                        <h3 class="timeline-title">CTF Team (L3ak)</h3>
+                        <div class="timeline-role">Co-founder & Player</div>
+                        <p class="timeline-desc">Co-founded and competed with L3ak, achieving top rankings in CTFs like <a href="https://www.linkedin.com/posts/achux21_cyberapocalypse2024-htb-ctf-activity-7174433650619387904-XPWu" target="_blank" style="color: var(--accent-purple);">HTB Apocalypse</a> & <a href="https://www.linkedin.com/posts/moabid42_akasec-ctf-ctftime-activity-7205932548391063554-yDGd" target="_blank" style="color: var(--accent-purple);">Akasec '24</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section-glow">
+        <div class="container">
+            <h2 class="section-title">/dev/connect</h2>
+            <div class="contact-grid">
+                <div>
+                    <ul class="contact-list">
+                        <li>
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <a href="mailto:21@achux21.com">21@achux21.com</a>
+                        </li>
+                        <li>
+                            <div class="contact-icon">
+                                <i class="fab fa-linkedin"></i>
+                            </div>
+                            <a href="https://www.linkedin.com/in/achux21" target="_blank">/in/achux21</a>
+                        </li>
+                        <li>
+                            <div class="contact-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <a href="https://github.com/ACHUX21" target="_blank">/ACHUX21</a>
+                        </li>
+                        <li>
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <a href="tel:+8618501674893">+86 18501674893</a>
+                        </li>
+                        <li>
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <span>Dalian, China</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <form class="contact-form" action="https://formspree.io/f/mkgvdjrg" method="POST">
+                    <input type="text" name="name" class="form-input" placeholder="Name" required>
+                    <input type="email" name="email" class="form-input" placeholder="Email" required>
+                    <textarea name="message" class="form-input form-textarea" placeholder="Message..." required></textarea>
+                    <button type="submit" class="submit-btn">Send Signal</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div class="lain-quote">
+        And you don't seem to understand.
     </div>
-</section>
 
-        <section id="timeline">
-            <div class="container">
-                <div class="section-window">
-                    <div class="window-header"><div class="window-title">/var/log/timeline.log</div></div>
-                    <div class="timeline">
-                        <div class="timeline-item future"><div class="timeline-node"></div><div class="timeline-content"><div class="timeline-date">Sep 2025 - Jun 2029 (Future)</div><h3 class="timeline-title">Dalian Polytechnic University</h3><div class="timeline-role">Bachelor's in Computer Science</div><p class="timeline-desc">Pursuing a comprehensive bachelor's degree in Computer Science.</p></div></div>
-                        <div class="timeline-item active"><div class="timeline-node"></div><div class="timeline-content"><div class="timeline-date">Feb 2025 - Present</div><h3 class="timeline-title">CTF Team (AKASEC)</h3><div class="timeline-role">Player</div><p class="timeline-desc">Competing in CTFs, specializing in web exploitation and reverse engineering.</p></div></div>
-                        <div class="timeline-item active"><div class="timeline-node"></div><div class="timeline-content"><div class="timeline-date">Jan 2025 - Present</div><h3 class="timeline-title">Hack The Box</h3><div class="timeline-role">Meetup Host Manager (Casablanca)</div><p class="timeline-desc">Organizing local cybersecurity community events and workshops.</p></div></div>
-                        <div class="timeline-item"><div class="timeline-node"></div><div class="timeline-content"><div class="timeline-date">Sep 2023 - Jul 2025</div><h3 class="timeline-title">Cybersecurity Specialist Program</h3><div class="timeline-role">ISGI - Technical Specialist</div><p class="timeline-desc">Completed an intensive 2-year program specializing in network security, ethical hacking methodologies, and digital forensics techniques. (Frensh language)</p></div></div>
-                        <div class="timeline-item"><div class="timeline-node"></div><div class="timeline-content"><div class="timeline-date">Jan 2025 - Mar 2025</div><h3 class="timeline-title">Swift IT</h3><div class="timeline-role">Junior Penetration Tester</div><p class="timeline-desc">Performed penetration tests and developed custom security tools.</p></div></div>
-                        <div class="timeline-item"><div class="timeline-node"></div><div class="timeline-content"><div class="timeline-date">Apr 2024 - Aug 2024</div><h3 class="timeline-title">Bugcrowd (Freelance)</h3><div class="timeline-role">Bug Hunter</div><p class="timeline-desc">Identified and reported web application security vulnerabilities.</p></div></div>
-                        <div class="timeline-item"><div class="timeline-node"></div><div class="timeline-content"><div class="timeline-date">Mar 2023 - Oct 2024</div><h3 class="timeline-title">CTF Team (L3ak)</h3><div class="timeline-role">Co-founder & Player</div><p class="timeline-desc">Co-founded and competed with L3ak, achieving top rankings in CTFs like <a href="https://www.linkedin.com/posts/achux21_cyberapocalypse2024-htb-ctf-activity-7174433650619387904-XPWu" target="_blank">HTB Apocalypse</a> & <a href="https://www.linkedin.com/posts/moabid42_akasec-ctf-ctftime-activity-7205932548391063554-yDGd" target="_blank">Akasec '24</a>.</p></div></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact">
-            <div class="container">
-                 <div class="section-window">
-                    <div class="window-header"><div class="window-title">/dev/connect</div></div>
-                    <div class="contact-grid">
-                        <div class="contact-info">
-                            <ul class="contact-list">
-                                <li><i class="fas fa-envelope"></i><a href="mailto:21@achux21.com">21@achux21.com</a></li>
-                                <li><i class="fab fa-linkedin"></i><a href="https://www.linkedin.com/in/achux21" target="_blank">/in/achux21</a></li>
-                                <li><i class="fab fa-github"></i><a href="https://github.com/ACHUX21" target="_blank">/ACHUX21</a></li>
-                                <li><i class="fas fa-phone"></i><a href="tel:+8618501674893">+86 18501674893</a></li>
-                                <li><i class="fas fa-map-marker-alt"></i><span>Dalian, China</span></li>
-                            </ul>
-                        </div>
-                        <form action="https://formspree.io/f/mkgvdjrg" method="POST">
-                            <input type="text" name="name" placeholder="Name" required>
-                            <input type="email" name="email" placeholder="Email" required>
-                            <textarea name="message" placeholder="Message..." required></textarea>
-                            <button type="submit" class="btn submit-btn">Send Signal</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
+    <footer class="footer">
         <div class="container">
             <div class="social-links">
-                <a href="https://github.com/ACHUX21" target="_blank" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                <a href="https://www.linkedin.com/in/achux21" target="_blank" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                <a href="https://blog.achux21.com" target="_blank" class="social-link" aria-label="Blog"><i class="fas fa-blog"></i></a>
+                <a href="https://github.com/ACHUX21" target="_blank" class="social-link">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/achux21" target="_blank" class="social-link">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://blog.achux21.com" target="_blank" class="social-link">
+                    <i class="fas fa-blog"></i>
+                </a>
             </div>
-            <p class="copyright">And you don't seem to understand.</p>
+            <p class="copyright">Present day, present time. // ACHUX21</p>
         </div>
     </footer>
 
-    <script src="scripts.js"></script>
-
+    <script>
+        // Mouse Particle System
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let particles = [];
+        const mouse = { x: null, y: null, radius: 100 };
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                this.color = `rgba(${168 + Math.random() * 50}, ${85 + Math.random() * 50}, ${247 + Math.random() * 50}, ${Math.random() * 0.5 + 0.2})`;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                if (this.x > canvas.width) this.x = 0;
+                else if (this.x < 0) this.x = canvas.width;
+                
+                if (this.y > canvas.height) this.y = 0;
+                else if (this.y < 0) this.y = canvas.height;
+                
+                // Mouse interaction
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < mouse.radius) {
+                    this.speedX = -dx * 0.05;
+                    this.speedY = -dy * 0.05;
+                    this.color = `rgba(255, 255, 255, 0.8)`;
+                }
+            }
+            
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 50
+            ; i++) {
+                particles.push(new Particle());
+            }
+        }
+        
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                // Connect particles with lines
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(168, 85, 247, ${0.2 * (1 - distance/100)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            requestAnimationFrame(animateParticles);
+        }
+        
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorRing = document.querySelector('.cursor-ring');
+        let mouseX = 0, mouseY = 0;
+        let ringX = 0, ringY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            
+            cursor.style.left = `${mouseX}px`;
+            cursor.style.top = `${mouseY}px`;
+        });
+        
+        function animateCursor() {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            
+            cursorRing.style.left = `${ringX - 16}px`;
+            cursorRing.style.top = `${ringY - 16}px`;
+            
+            requestAnimationFrame(animateCursor);
+        }
+        
+        // Navigation Active State
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        function updateActiveNav() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if(window.pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if(link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        // Nav Scroll Effect
+        const nav = document.querySelector('.nav');
+        
+        function updateNav() {
+            if(window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        }
+        
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                if(this.getAttribute('href') !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if(target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            // Initialize particles
+            initParticles();
+            animateParticles();
+            animateCursor();
+            
+            // Initial nav update
+            updateNav();
+            updateActiveNav();
+            
+            // Add event listeners
+            window.addEventListener('scroll', () => {
+                updateNav();
+                updateActiveNav();
+            });
+            
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                initParticles();
+            });
+            
+            // Hide cursor when not moving
+            let cursorTimer;
+            document.addEventListener('mousemove', () => {
+                cursor.style.opacity = '1';
+                cursorRing.style.opacity = '1';
+                clearTimeout(cursorTimer);
+                cursorTimer = setTimeout(() => {
+                    cursor.style.opacity = '0';
+                    cursorRing.style.opacity = '0';
+                }, 3000);
+            });
+        });
+        
+        // Mouse leave handling
+        document.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+    </script>
 </body>
 </html>
