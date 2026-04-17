@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Achraf Ouazzani Chahidi | Resume</title>
+    <meta
+      name="description"
+      content="Resume of Achraf Ouazzani Chahidi covering AI security, offensive security, application security, projects, education, and certifications."
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #eef3f6;
+        --sheet: #ffffff;
+        --text: #1f2933;
+        --muted: #5b6670;
+        --rule: #d9dee3;
+        --primary: #103a5c;
+        --accent: #2f6f8f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: var(--text);
+        background: linear-gradient(180deg, #eef3f6 0%, #dde7ee 100%);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .resume-page {
+        width: min(1024px, calc(100% - 2rem));
+        margin: 2rem auto;
+        background: var(--sheet);
+        border-radius: 24px;
+        box-shadow: 0 24px 70px rgba(16, 58, 92, 0.12);
+        overflow: hidden;
+      }
+
+      .resume-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        background: #f7fafc;
+        border-bottom: 1px solid var(--rule);
+      }
+
+      .resume-toolbar__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .resume-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 999px;
+        border: 1px solid #cfd8df;
+        background: white;
+        text-decoration: none;
+      }
+
+      .resume-button--primary {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+      }
+
+      .resume-sheet {
+        padding: 2rem;
+      }
+
+      .resume-header h1 {
+        margin: 0;
+        font-size: clamp(2rem, 4vw, 2.5rem);
+        color: var(--primary);
+      }
+
+      .resume-header__role {
+        margin: 0.4rem 0 0;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .resume-contact {
+        margin-top: 0.8rem;
+        color: var(--muted);
+        line-height: 1.8;
+      }
+
+      .resume-summary {
+        margin-top: 1.2rem;
+        padding: 1rem 1.1rem;
+        background: #f4f7f9;
+        border-left: 4px solid var(--accent);
+        border-radius: 12px;
+        line-height: 1.7;
+      }
+
+      .resume-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.95fr);
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+      }
+
+      .resume-section {
+        margin-top: 1.2rem;
+      }
+
+      .resume-section:first-child {
+        margin-top: 0;
+      }
+
+      .resume-section h2 {
+        margin: 0 0 0.75rem;
+        font-size: 1.1rem;
+        color: var(--primary);
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid var(--rule);
+      }
+
+      .resume-entry {
+        margin-bottom: 1rem;
+      }
+
+      .resume-entry:last-child {
+        margin-bottom: 0;
+      }
+
+      .resume-entry__top {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: baseline;
+      }
+
+      .resume-entry__title {
+        font-weight: 700;
+      }
+
+      .resume-entry__meta {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .resume-entry__sub {
+        margin: 0.2rem 0 0.45rem;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .resume-entry ul {
+        margin: 0.45rem 0 0;
+        padding-left: 1.15rem;
+        line-height: 1.7;
+      }
+
+      .resume-project {
+        margin-bottom: 0.9rem;
+      }
+
+      .resume-project strong {
+        color: var(--text);
+      }
+
+      .resume-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+      }
+
+      .resume-tag {
+        padding: 0.45rem 0.7rem;
+        background: #f4f7f9;
+        border-radius: 999px;
+        color: var(--primary);
+        font-size: 0.92rem;
+      }
+
+      .resume-list {
+        margin: 0;
+        padding-left: 1rem;
+        line-height: 1.7;
+      }
+
+      .resume-note {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 860px) {
+        .resume-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .resume-entry__top {
+          flex-direction: column;
+          gap: 0.15rem;
+        }
+      }
+
+      @media print {
+        body {
+          background: white;
+        }
+
+        .resume-page {
+          width: 100%;
+          margin: 0;
+          border-radius: 0;
+          box-shadow: none;
+        }
+
+        .resume-toolbar {
+          display: none;
+        }
+
+        .resume-sheet {
+          padding: 0.25in 0.3in;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="resume-page">
+      <div class="resume-toolbar">
+        <div>Resume of Achraf Ouazzani Chahidi</div>
+        <div class="resume-toolbar__actions">
+          <button class="resume-button resume-button--primary" onclick="window.print()" type="button">
+            Print / Save PDF
+          </button>
+          <a class="resume-button" href="/">Back to site</a>
+        </div>
+      </div>
+
+      <main class="resume-sheet">
+        <header class="resume-header">
+          <h1>Achraf Ouazzani Chahidi</h1>
+          <p class="resume-header__role">AI Security • Offensive Security • Application Security</p>
+          <div class="resume-contact">
+            <a href="mailto:21@achux21.com">21@achux21.com</a> • +86 135 9131 8052 •
+            <a href="https://achux21.com">achux21.com</a> •
+            <a href="https://github.com/ACHUX21">github.com/ACHUX21</a> •
+            <a href="https://www.linkedin.com/in/achux21">linkedin.com/in/achux21</a>
+          </div>
+          <div class="resume-summary">
+            AI Security and Application Security student with hands-on experience in web exploitation,
+            vulnerability research, and security tooling. Active CTF competitor with multiple 1st place
+            finishes and challenge author experience. Building security tools combining static analysis
+            and AI for vulnerability detection, with strong foundations in Python, C, and systems-level
+            programming.
+          </div>
+        </header>
+
+        <div class="resume-grid">
+          <section>
+            <section class="resume-section">
+              <h2>Experience</h2>
+              <article class="resume-entry">
+                <div class="resume-entry__top">
+                  <div class="resume-entry__title">Junior Penetration Tester</div>
+                  <div class="resume-entry__meta">Jan 2025 - Mar 2025</div>
+                </div>
+                <div class="resume-entry__sub">Swift IT • Casablanca, Morocco</div>
+                <ul>
+                  <li>Performed authorized assessments of web applications and systems, validating issues such as SQL injection, XSS, and IDOR.</li>
+                  <li>Built a Python tool to automate detection of HTTP request smuggling behavior during engagements.</li>
+                  <li>Delivered proof-of-concepts and technical reports with impact analysis and remediation guidance.</li>
+                </ul>
+              </article>
+            </section>
+
+            <section class="resume-section">
+              <h2>Selected Projects</h2>
+              <div class="resume-project">
+                <strong>PackGuard</strong> <span class="resume-note">(AI-powered package security scanner)</span><br />
+                Detects malicious packages in npm/PyPI using static analysis, heuristic detection, and local AI models for typosquatting and supply-chain attacks.
+              </div>
+              <div class="resume-project">
+                <strong>HTTP Request Smuggling Detector</strong> <span class="resume-note">(Python)</span><br />
+                Custom Python tool to identify desynchronization vulnerabilities in HTTP parsing behavior.
+              </div>
+              <div class="resume-project">
+                <strong>Custom Shell in C</strong> <span class="resume-note">(C, Linux)</span><br />
+                Implemented process execution, command parsing, and system-level interaction in C.
+              </div>
+              <div class="resume-project">
+                <strong>Vulnerability Scanner Suite</strong> <span class="resume-note">(Python, Bash)</span><br />
+                Automated reconnaissance and fuzzing toolkit supporting faster security testing workflows.
+              </div>
+            </section>
+
+            <section class="resume-section">
+              <h2>Security &amp; Research</h2>
+              <ul class="resume-list">
+                <li>Published 10+ CTF and platform writeups covering SSRF, SSTI, SQLi, JWT, and RCE at <a href="https://blog.achux21.com">blog.achux21.com</a>.</li>
+                <li>Active CTF competitor with AKASEC and multiple top placements.</li>
+                <li>Designed and authored web exploitation challenges for multiple CTF events.</li>
+              </ul>
+            </section>
+
+            <section class="resume-section">
+              <h2>Achievements</h2>
+              <ul class="resume-list">
+                <li>1st Place - MCSC 2025, IDEH 2025, AISEC 2025</li>
+                <li>2nd Place - Cyber Odyssey 2024</li>
+                <li>Top 15 - HTB Cyber Apocalypse 2024 (Team L3ak)</li>
+              </ul>
+            </section>
+          </section>
+
+          <aside>
+            <section class="resume-section">
+              <h2>Current Focus</h2>
+              <div class="resume-tags">
+                <span class="resume-tag">Supply chain security</span>
+                <span class="resume-tag">Static analysis</span>
+                <span class="resume-tag">AI-assisted detection</span>
+              </div>
+            </section>
+
+            <section class="resume-section">
+              <h2>Skills</h2>
+              <div class="resume-entry">
+                <div class="resume-entry__title">Programming</div>
+                <div class="resume-entry__sub">Python, C, Bash, JavaScript</div>
+              </div>
+              <div class="resume-entry">
+                <div class="resume-entry__title">Security</div>
+                <div class="resume-entry__sub">Web Exploitation (SQLi, XSS, SSRF, IDOR), AppSec, OWASP</div>
+              </div>
+              <div class="resume-entry">
+                <div class="resume-entry__title">AI Security</div>
+                <div class="resume-entry__sub">Supply Chain Security, Static Analysis, AI-assisted detection</div>
+              </div>
+              <div class="resume-entry">
+                <div class="resume-entry__title">Tools</div>
+                <div class="resume-entry__sub">Burp Suite, Nmap, Metasploit, ffuf, sqlmap</div>
+              </div>
+              <div class="resume-entry">
+                <div class="resume-entry__title">Systems</div>
+                <div class="resume-entry__sub">Linux, Docker</div>
+              </div>
+            </section>
+
+            <section class="resume-section">
+              <h2>Education</h2>
+              <div class="resume-entry">
+                <div class="resume-entry__title">Dalian Polytechnic University</div>
+                <div class="resume-entry__sub">B.Sc. in Computer Science (in progress)</div>
+                <div class="resume-note">2025 - 2029 • Dalian, China</div>
+              </div>
+              <div class="resume-entry">
+                <div class="resume-entry__title">Specialized Institute of Management and Computer Science</div>
+                <div class="resume-entry__sub">Technician Degree in Cybersecurity</div>
+                <div class="resume-note">2023 - 2025 • Casablanca, Morocco</div>
+              </div>
+            </section>
+
+            <section class="resume-section">
+              <h2>Certifications</h2>
+              <div class="resume-entry">
+                <div class="resume-entry__title">eJPTv2</div>
+                <div class="resume-entry__sub">INE Junior Penetration Tester</div>
+              </div>
+              <div class="resume-entry">
+                <div class="resume-entry__title">Cisco Networking Academy coursework</div>
+                <div class="resume-entry__sub">Introduction to Networks; Switching and Routing</div>
+              </div>
+            </section>
+
+            <section class="resume-section">
+              <h2>Languages</h2>
+              <div class="resume-tags">
+                <span class="resume-tag">Arabic (Native)</span>
+                <span class="resume-tag">English (Fluent)</span>
+                <span class="resume-tag">French (Fluent)</span>
+                <span class="resume-tag">Chinese (Basic)</span>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
