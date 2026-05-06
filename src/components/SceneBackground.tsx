@@ -1,7 +1,12 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
-
+import {
+  Bloom,
+  ChromaticAberration,
+  EffectComposer,
+} from "@react-three/postprocessing";
+import { BlendFunction } from "postprocessing";
 
 const palette = {
   background: "#05030a",
@@ -470,7 +475,18 @@ function Scene({
       <ParticleField />
       <GeometricAccents animate={animate} />
 
-
+      <EffectComposer enableNormalPass={false}>
+        <Bloom
+          blendFunction={BlendFunction.SCREEN}
+          intensity={0.4}
+          luminanceThreshold={0.6}
+          luminanceSmoothing={0.2}
+        />
+        <ChromaticAberration
+          blendFunction={BlendFunction.NORMAL}
+          offset={new THREE.Vector2(0.001, 0.0005)}
+        />
+      </EffectComposer>
     </>
   );
 }
