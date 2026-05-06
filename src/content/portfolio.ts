@@ -103,7 +103,7 @@ export const portfolio: PortfolioContent = {
   github: "https://github.com/ACHUX21",
   linkedin: "https://www.linkedin.com/in/achux21",
   blog: "https://blog.achux21.com",
-  resumeUrl: "/resume.html",
+  resumeUrl: "/achraf-ouazzani-chahidi-resume.pdf",
   socials: [
     { label: "GitHub", url: "https://github.com/ACHUX21" },
     { label: "LinkedIn", url: "https://www.linkedin.com/in/achux21" },

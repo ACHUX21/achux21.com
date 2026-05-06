@@ -45,11 +45,13 @@ That file controls:
 - social links
 - selected public posts
 
-The public resume route is:
+The public resume assets live in:
 
-`public/resume.html`
+`public/achraf-ouazzani-chahidi-resume.tex`
 
-The main site links to `/resume.html` when `resumeUrl` is present in the portfolio content.
+and the generated PDF served by the site is:
+
+`public/achraf-ouazzani-chahidi-resume.pdf`
 
 ## Styling and motion
 

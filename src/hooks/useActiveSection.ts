@@ -6,29 +6,24 @@ export function useActiveSection(sectionIds: string[]) {
   useEffect(() => {
     const sections = sectionIds
       .map((id) => document.getElementById(id))
-      .filter((section): section is HTMLElement => section instanceof HTMLElement);
+      .filter((el): el is HTMLElement => el instanceof HTMLElement);
 
-    if (!sections.length) {
-      return undefined;
-    }
+    if (!sections.length) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
-          .filter((entry) => entry.isIntersecting)
+          .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
 
         if (visible[0]?.target?.id) {
           setActiveSection(visible[0].target.id);
         }
       },
-      {
-        rootMargin: "-35% 0px -45% 0px",
-        threshold: [0.15, 0.3, 0.6],
-      },
+      { rootMargin: "-35% 0px -45% 0px", threshold: [0.15, 0.3, 0.6] },
     );
 
-    sections.forEach((section) => observer.observe(section));
+    sections.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [sectionIds]);
 

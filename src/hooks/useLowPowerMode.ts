@@ -2,16 +2,11 @@ import { useEffect, useState } from "react";
 import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 
 type NavigatorWithConnection = Navigator & {
-  connection?: {
-    saveData?: boolean;
-  };
+  connection?: { saveData?: boolean };
 };
 
 function readLowPowerMode() {
-  if (typeof window === "undefined") {
-    return false;
-  }
-
+  if (typeof window === "undefined") return false;
   const smallScreen = window.innerWidth < 900;
   const saveData = Boolean((navigator as NavigatorWithConnection).connection?.saveData);
   return smallScreen || saveData;

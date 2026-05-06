@@ -1,6 +1,12 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import {
+  Bloom,
+  ChromaticAberration,
+  EffectComposer,
+} from "@react-three/postprocessing";
+import { BlendFunction } from "postprocessing";
 
 const palette = {
   background: "#05030a",
@@ -11,12 +17,12 @@ const palette = {
   glow: "#f2b8ff",
   violet: "#8b73df",
   shadow: "#0a0610",
+  deep: "#1a0a2e",
 };
 
 type SceneBackgroundProps = {
   animate: boolean;
   reducedMotion: boolean;
-  scrollProgress: number;
 };
 
 function usePointerTarget() {
@@ -24,11 +30,11 @@ function usePointerTarget() {
 
   useEffect(() => {
     const handleMove = (event: PointerEvent) => {
-      const x = (event.clientX / window.innerWidth) * 2 - 1;
-      const y = (event.clientY / window.innerHeight) * 2 - 1;
-      setPointer({ x, y });
+      setPointer({
+        x: (event.clientX / window.innerWidth) * 2 - 1,
+        y: (event.clientY / window.innerHeight) * 2 - 1,
+      });
     };
-
     window.addEventListener("pointermove", handleMove, { passive: true });
     return () => window.removeEventListener("pointermove", handleMove);
   }, []);
@@ -39,26 +45,101 @@ function usePointerTarget() {
 function CameraRig({
   animate,
   reducedMotion,
-  scrollProgress,
   pointer,
-}: SceneBackgroundProps & { pointer: { x: number; y: number } }) {
+}: {
+  animate: boolean;
+  reducedMotion: boolean;
+  pointer: { x: number; y: number };
+}) {
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     const motion = reducedMotion ? 0.1 : 1;
-    const baseX = THREE.MathUtils.lerp(-0.12, 0.14, scrollProgress);
-    const baseY = THREE.MathUtils.lerp(0.08, -0.06, scrollProgress);
-    const baseZ = THREE.MathUtils.lerp(9.8, 8.6, scrollProgress);
+    const targetX =
+      pointer.x * 0.3 * motion +
+      (animate ? Math.sin(t * 0.18) * 0.05 * motion : 0);
+    const targetY =
+      -pointer.y * 0.15 * motion +
+      (animate ? Math.cos(t * 0.16) * 0.04 * motion : 0);
 
-    const targetX = baseX + pointer.x * 0.34 * motion + (animate ? Math.sin(t * 0.18) * 0.04 * motion : 0);
-    const targetY = baseY - pointer.y * 0.18 * motion + (animate ? Math.cos(t * 0.16) * 0.03 * motion : 0);
-
-    state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, targetX, 0.04);
-    state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, targetY, 0.04);
-    state.camera.position.z = THREE.MathUtils.lerp(state.camera.position.z, baseZ, 0.03);
-    state.camera.lookAt(pointer.x * 0.24, pointer.y * 0.06, -6.5 + scrollProgress * 0.6);
+    state.camera.position.x = THREE.MathUtils.lerp(
+      state.camera.position.x,
+      targetX,
+      0.03,
+    );
+    state.camera.position.y = THREE.MathUtils.lerp(
+      state.camera.position.y,
+      targetY,
+      0.03,
+    );
+    state.camera.position.z = THREE.MathUtils.lerp(
+      state.camera.position.z,
+      8.2,
+      0.02,
+    );
+    state.camera.lookAt(
+      pointer.x * 0.5,
+      pointer.y * 0.1,
+      -7 + Math.sin(t * 0.12) * 0.3,
+    );
   });
 
   return null;
+}
+
+// Instanced particles for performance
+function ParticleField() {
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const count = 300;
+  const dummy = useRef(new THREE.Object3D());
+
+  useEffect(() => {
+    if (!meshRef.current) return;
+    for (let i = 0; i < count; i++) {
+      dummy.current.position.set(
+        (Math.random() - 0.5) * 16,
+        (Math.random() - 0.5) * 12,
+        -Math.random() * 10 - 3,
+      );
+      dummy.current.scale.setScalar(Math.random() * 0.03 + 0.01);
+      dummy.current.updateMatrix();
+      meshRef.current.setMatrixAt(i, dummy.current.matrix);
+    }
+    meshRef.current.instanceMatrix.needsUpdate = true;
+  }, []);
+
+  useFrame((state) => {
+    if (!meshRef.current) return;
+    const t = state.clock.elapsedTime;
+    for (let i = 0; i < count; i++) {
+      meshRef.current.getMatrixAt(i, dummy.current.matrix);
+      dummy.current.matrix.decompose(
+        dummy.current.position,
+        dummy.current.quaternion,
+        dummy.current.scale,
+      );
+      dummy.current.position.y += Math.sin(t * 0.6 + i * 0.07) * 0.002;
+      dummy.current.position.x += Math.cos(t * 0.4 + i * 0.11) * 0.0015;
+      dummy.current.updateMatrix();
+      meshRef.current.setMatrixAt(i, dummy.current.matrix);
+    }
+    meshRef.current.instanceMatrix.needsUpdate = true;
+  });
+
+  const instancedArgs = useMemo(
+    () => [
+      new THREE.SphereGeometry(0.02, 4, 4),
+      new THREE.MeshBasicMaterial({
+        color: palette.edge,
+        transparent: true,
+        opacity: 0.5,
+        depthWrite: false,
+      }),
+      count,
+    ] as const,
+    [count],
+  );
+
+  return <instancedMesh ref={meshRef} args={instancedArgs as never} />;
 }
 
 function Chamber() {
@@ -85,7 +166,12 @@ function Chamber() {
       </mesh>
       <mesh position={[0, 0.2, -14]}>
         <planeGeometry args={[15, 10]} />
-        <meshBasicMaterial color={palette.wall} transparent opacity={0.34} />
+        <meshBasicMaterial
+          color={palette.wall}
+          transparent
+          opacity={0.34}
+          depthWrite={false}
+        />
       </mesh>
     </>
   );
@@ -101,43 +187,76 @@ function Frames({
   const groupRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
-    if (!groupRef.current) {
-      return;
-    }
-
+    if (!groupRef.current) return;
     const t = state.clock.elapsedTime;
-    groupRef.current.children.forEach((child: THREE.Object3D, index: number) => {
-      const depthFactor = 1 - index * 0.14;
-      child.position.x = THREE.MathUtils.lerp(child.position.x, pointer.x * depthFactor * 0.75, 0.03);
+    groupRef.current.children.forEach((child, index) => {
+      const d = 1 - index * 0.14;
+      child.position.x = THREE.MathUtils.lerp(
+        child.position.x,
+        pointer.x * d * 0.75,
+        0.03,
+      );
       child.position.y = THREE.MathUtils.lerp(
         child.position.y,
-        pointer.y * depthFactor * 0.18 + (animate ? Math.sin(t * 0.22 + index) * 0.04 : 0),
+        pointer.y * d * 0.18 +
+          (animate ? Math.sin(t * 0.22 + index) * 0.04 : 0),
         0.03,
       );
     });
   });
 
   const layers = [
-    { z: -4.2, w: 9.8, h: 7.2, opacity: 0.08, color: palette.edge, rotate: -8 },
-    { z: -5.5, w: 7.2, h: 5.5, opacity: 0.1, color: palette.panel, rotate: 5 },
-    { z: -6.6, w: 5.4, h: 4.1, opacity: 0.12, color: palette.violet, rotate: -3 },
+    {
+      z: -4.2,
+      w: 9.8,
+      h: 7.2,
+      opacity: 0.1,
+      color: palette.edge,
+      rotate: -8,
+    },
+    {
+      z: -5.5,
+      w: 7.2,
+      h: 5.5,
+      opacity: 0.12,
+      color: palette.panel,
+      rotate: 5,
+    },
+    {
+      z: -6.6,
+      w: 5.4,
+      h: 4.1,
+      opacity: 0.14,
+      color: palette.violet,
+      rotate: -3,
+    },
   ];
 
   return (
     <group ref={groupRef}>
-      {layers.map((layer, index) => (
+      {layers.map((layer, i) => (
         <group
-          key={`frame-${index}`}
+          key={`frame-${i}`}
           position={[0, 0, layer.z]}
           rotation={[0, 0, THREE.MathUtils.degToRad(layer.rotate)]}
         >
+          {/* Glow border */}
           <mesh>
             <planeGeometry args={[layer.w, layer.h]} />
-            <meshBasicMaterial color={layer.color} transparent opacity={layer.opacity} />
+            <meshBasicMaterial
+              color={layer.color}
+              transparent
+              opacity={layer.opacity}
+            />
           </mesh>
+          {/* Inner panel */}
           <mesh position={[0, 0, -0.04]}>
             <planeGeometry args={[layer.w * 0.9, layer.h * 0.88]} />
-            <meshBasicMaterial color={palette.wall} transparent opacity={0.18 + index * 0.04} />
+            <meshBasicMaterial
+              color={palette.wall}
+              transparent
+              opacity={0.2 + i * 0.05}
+            />
           </mesh>
         </group>
       ))}
@@ -161,13 +280,33 @@ function LightBars({
     const float = animate ? Math.sin(t * 0.24) * 0.05 : 0;
 
     if (leftRef.current) {
-      leftRef.current.position.x = THREE.MathUtils.lerp(leftRef.current.position.x, -4.2 + pointer.x * 0.16, 0.04);
-      leftRef.current.position.y = THREE.MathUtils.lerp(leftRef.current.position.y, 0.2 + pointer.y * 0.06 + float, 0.04);
+      leftRef.current.position.x = THREE.MathUtils.lerp(
+        leftRef.current.position.x,
+        -4.2 + pointer.x * 0.16,
+        0.04,
+      );
+      leftRef.current.position.y = THREE.MathUtils.lerp(
+        leftRef.current.position.y,
+        0.2 + pointer.y * 0.06 + float,
+        0.04,
+      );
+      (leftRef.current.material as THREE.MeshBasicMaterial).opacity =
+        0.13 + Math.sin(t * 1.2) * 0.03;
     }
 
     if (rightRef.current) {
-      rightRef.current.position.x = THREE.MathUtils.lerp(rightRef.current.position.x, 4.1 + pointer.x * 0.14, 0.04);
-      rightRef.current.position.y = THREE.MathUtils.lerp(rightRef.current.position.y, -0.4 + pointer.y * 0.06 - float, 0.04);
+      rightRef.current.position.x = THREE.MathUtils.lerp(
+        rightRef.current.position.x,
+        4.1 + pointer.x * 0.14,
+        0.04,
+      );
+      rightRef.current.position.y = THREE.MathUtils.lerp(
+        rightRef.current.position.y,
+        -0.4 + pointer.y * 0.06 - float,
+        0.04,
+      );
+      (rightRef.current.material as THREE.MeshBasicMaterial).opacity =
+        0.11 + Math.cos(t * 1.1) * 0.03;
     }
 
     if (ringRef.current) {
@@ -183,17 +322,77 @@ function LightBars({
     <>
       <mesh position={[-4.2, 0.2, -8.2]} ref={leftRef}>
         <planeGeometry args={[0.2, 9.2]} />
-        <meshBasicMaterial color={palette.edge} transparent opacity={0.13} />
+        <meshBasicMaterial
+          color={palette.edge}
+          transparent
+          opacity={0.13}
+        />
       </mesh>
       <mesh position={[4.1, -0.4, -8]} ref={rightRef}>
         <planeGeometry args={[0.16, 8]} />
-        <meshBasicMaterial color={palette.glow} transparent opacity={0.11} />
+        <meshBasicMaterial
+          color={palette.glow}
+          transparent
+          opacity={0.11}
+        />
       </mesh>
-      <mesh position={[0, -5.76, -6.5]} ref={ringRef} rotation={[-Math.PI / 2, 0, 0]}>
+      {/* Rotating ring */}
+      <mesh
+        position={[0, -5.76, -6.5]}
+        ref={ringRef}
+        rotation={[-Math.PI / 2, 0, 0]}
+      >
         <ringGeometry args={[1.1, 2.1, 48]} />
-        <meshBasicMaterial color={palette.violet} transparent opacity={0.09} side={THREE.DoubleSide} />
+        <meshBasicMaterial
+          color={palette.violet}
+          transparent
+          opacity={0.1}
+          side={THREE.DoubleSide}
+        />
       </mesh>
     </>
+  );
+}
+
+function GeometricAccents({
+  animate,
+}: {
+  animate: boolean;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    if (!groupRef.current || !animate) return;
+    const t = state.clock.elapsedTime;
+    groupRef.current.rotation.y += 0.001;
+    groupRef.current.children.forEach((child, i) => {
+      child.rotation.z += (i % 2 ? 0.002 : -0.002);
+    });
+  });
+
+  return (
+    <group ref={groupRef} position={[0, -1, -9]}>
+      {[0, 1, 2].map((i) => (
+        <mesh
+          key={`geo-${i}`}
+          position={[
+            Math.cos((i / 3) * Math.PI * 2) * 2.4,
+            Math.sin((i / 3) * Math.PI * 2) * 1.8,
+            -i * 0.6,
+          ]}
+          rotation={[Math.random(), Math.random(), Math.random()]}
+        >
+          <octahedronGeometry args={[0.18 + i * 0.04, 0]} />
+          <meshBasicMaterial
+            color={i === 0 ? palette.edge : i === 1 ? palette.glow : palette.violet}
+            transparent
+            opacity={0.15 + i * 0.05}
+            wireframe={i === 2}
+            depthWrite={false}
+          />
+        </mesh>
+      ))}
+    </group>
   );
 }
 
@@ -201,11 +400,29 @@ function Haze() {
   return (
     <group>
       {[
-        { position: [-4.2, 2.2, -12], size: [7.2, 6.4], color: palette.edge, opacity: 0.02 },
-        { position: [4.4, -0.6, -11.5], size: [8.2, 6.6], color: palette.glow, opacity: 0.02 },
-        { position: [0, -4.6, -10.4], size: [12.8, 3.6], color: palette.violet, opacity: 0.015 },
-      ].map((plane, index) => (
-        <mesh key={`haze-${index}`} position={plane.position as [number, number, number]}>
+        {
+          position: [-4.2, 2.2, -12],
+          size: [7.2, 6.4],
+          color: palette.edge,
+          opacity: 0.02,
+        },
+        {
+          position: [4.4, -0.6, -11.5],
+          size: [8.2, 6.6],
+          color: palette.glow,
+          opacity: 0.02,
+        },
+        {
+          position: [0, -4.6, -10.4],
+          size: [12.8, 3.6],
+          color: palette.violet,
+          opacity: 0.015,
+        },
+      ].map((plane, i) => (
+        <mesh
+          key={`haze-${i}`}
+          position={plane.position as [number, number, number]}
+        >
           <planeGeometry args={plane.size as [number, number]} />
           <meshBasicMaterial
             color={plane.color}
@@ -219,19 +436,57 @@ function Haze() {
   );
 }
 
-function Scene(props: SceneBackgroundProps & { pointer: { x: number; y: number } }) {
+function Scene({
+  animate,
+  reducedMotion,
+  pointer,
+}: {
+  animate: boolean;
+  reducedMotion: boolean;
+  pointer: { x: number; y: number };
+}) {
   return (
     <>
       <color attach="background" args={[palette.background]} />
       <fog attach="fog" args={[palette.fog, 8, 21]} />
-      <CameraRig {...props} />
+      <CameraRig
+        animate={animate}
+        pointer={pointer}
+        reducedMotion={reducedMotion}
+      />
       <ambientLight color={palette.violet} intensity={0.18} />
-      <pointLight color={palette.edge} distance={12} intensity={1.2} position={[-1.2, 1.4, 0.8]} />
-      <pointLight color={palette.glow} distance={10} intensity={0.7} position={[1.8, -1.2, -1.4]} />
+      <pointLight
+        color={palette.edge}
+        distance={12}
+        intensity={1.2}
+        position={[-1.2, 1.4, 0.8]}
+      />
+      <pointLight
+        color={palette.glow}
+        distance={10}
+        intensity={0.7}
+        position={[1.8, -1.2, -1.4]}
+      />
+
       <Chamber />
       <Haze />
-      <Frames animate={props.animate} pointer={props.pointer} />
-      <LightBars animate={props.animate} pointer={props.pointer} />
+      <Frames animate={animate} pointer={pointer} />
+      <LightBars animate={animate} pointer={pointer} />
+      <ParticleField />
+      <GeometricAccents animate={animate} />
+
+      <EffectComposer enableNormalPass={false}>
+        <Bloom
+          blendFunction={BlendFunction.SCREEN}
+          intensity={0.4}
+          luminanceThreshold={0.6}
+          luminanceSmoothing={0.2}
+        />
+        <ChromaticAberration
+          blendFunction={BlendFunction.NORMAL}
+          offset={new THREE.Vector2(0.001, 0.0005)}
+        />
+      </EffectComposer>
     </>
   );
 }
@@ -241,10 +496,10 @@ function SceneBackground(props: SceneBackgroundProps) {
 
   return (
     <Canvas
-      camera={{ fov: 27, position: [0, 0.2, 9.8] }}
-      dpr={[1, 1.4]}
-      gl={{ antialias: true }}
-      performance={{ min: 0.6 }}
+      camera={{ fov: 27, position: [0, 0.2, 8.2], near: 0.1, far: 30 }}
+      dpr={[1, 1.5]}
+      gl={{ antialias: true, powerPreference: "high-performance" }}
+      performance={{ min: 0.5 }}
     >
       <Scene {...props} pointer={pointer} />
     </Canvas>
