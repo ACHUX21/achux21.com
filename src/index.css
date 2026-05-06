@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #05030a;
+  --color-panel: rgba(16, 10, 26, 0.78);
+  --color-panel-strong: rgba(12, 8, 20, 0.92);
+  --color-text: #f1eaf9;
+  --color-text-dim: #b5a7c8;
+  --color-line: rgba(193, 162, 255, 0.18);
+  --color-line-strong: rgba(221, 200, 255, 0.4);
+  --color-accent: #e8beff;
+  --color-accent-soft: #cbb7ff;
+  --color-accent-deep: #8b73df;
+  --font-mono: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+  --radius-panel: 24px;
+  --shadow-panel: 0 32px 90px rgba(0, 0, 0, 0.42);
+}
+
+/* === Base === */
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-mono);
+  color: var(--color-text);
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at top, rgba(106, 72, 168, 0.14), transparent 35%),
+    linear-gradient(180deg, #030205 0%, #0d0813 100%);
+}
+
+/* === View Transitions === */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: 200ms ease-out both fade-out;
+}
+
+::view-transition-new(root) {
+  animation: 300ms ease-in both fade-in;
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* === Background Overlays === */
+.overlay-grid {
+  background-image:
+    linear-gradient(rgba(181, 145, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(181, 145, 255, 0.05) 1px, transparent 1px);
+  background-size: 88px 88px;
+  opacity: 0.16;
+}
+
+.overlay-scanlines {
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03) 0,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  opacity: 0.08;
+}
+
+.overlay-noise {
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03) 0 1px, transparent 1px),
+    radial-gradient(circle at 70% 60%, rgba(255,255,255,0.02) 0 1px, transparent 1px),
+    radial-gradient(circle at 40% 80%, rgba(255,255,255,0.02) 0 1px, transparent 1px);
+  background-size: 120px 120px, 160px 160px, 200px 200px;
+  opacity: 0.12;
+  animation: noise-shift 400ms steps(2) infinite;
+}
+
+.overlay-vignette {
+  background: radial-gradient(circle at center, transparent 24%, rgba(0,0,0,0.8) 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay-noise {
+    animation: none;
+  }
+}
+
+@keyframes noise-shift {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(0.3%, -0.25%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* === Scene Fallback === */
+.scene-fallback {
+  background:
+    radial-gradient(circle at 18% 28%, rgba(216, 177, 255, 0.12), transparent 26%),
+    radial-gradient(circle at 82% 40%, rgba(139, 115, 223, 0.1), transparent 24%),
+    radial-gradient(circle at 46% 84%, rgba(240, 165, 255, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(14, 8, 22, 0.94), rgba(5, 3, 8, 1));
+}
+
+/* === Focus === */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* === Scroll-driven animation (progressive enhancement) === */
+@supports (animation-timeline: scroll()) {
+  .content-section {
+    animation: section-reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 30%;
+  }
+
+  @keyframes section-reveal {
+    from {
+      opacity: 0;
+      translate: 0 2rem;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+}
+
+/* === Panel utility === */
+.panel {
+  background: linear-gradient(180deg, rgba(18, 11, 28, 0.76), rgba(10, 6, 16, 0.92));
+  border: 1px solid var(--color-line);
+  box-shadow: var(--shadow-panel);
+  backdrop-filter: blur(14px);
+}
+
+/* === Post card image === */
+.post-card-img img {
+  filter: saturate(0.9) brightness(0.84);
+}
