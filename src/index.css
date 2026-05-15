@@ -329,11 +329,6 @@ main { padding-top: 0; }
   filter: blur(20px);
   transform: translateZ(-40px);
   opacity: calc(0.7 * var(--glow, 0.7) + 0.3);
-  animation: floorPulse 4.4s ease-in-out infinite;
-}
-@keyframes floorPulse {
-  0%, 100% { opacity: 0.55; }
-  50% { opacity: 0.95; }
 }
 
 .char-img {
@@ -348,14 +343,6 @@ main { padding-top: 0; }
   user-select: none;
   -webkit-user-drag: none;
   filter: drop-shadow(0 24px 36px rgba(0, 0, 0, 0.55));
-  animation: charFloat 7s ease-in-out infinite;
-  will-change: transform;
-  backface-visibility: hidden;
-  image-rendering: -webkit-optimize-contrast;
-}
-@keyframes charFloat {
-  0%, 100% { transform: translate3d(-50%, 0, 40px); }
-  50% { transform: translate3d(-50%, -10px, 40px); }
 }
 
 /* Holographic floating panels */
@@ -376,17 +363,7 @@ main { padding-top: 0; }
   box-shadow:
     0 0 24px color-mix(in oklch, oklch(0.78 0.14 200) calc(40% * var(--glow)), transparent),
     inset 0 0 1px color-mix(in oklch, oklch(0.86 0.14 200) 30%, transparent);
-  opacity: 0;
-  animation: holoFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s forwards,
-             holoFloat var(--float-dur, 7s) ease-in-out infinite;
-  will-change: transform, opacity;
-}
-@keyframes holoFadeIn {
-  to { opacity: 1; }
-}
-@keyframes holoFloat {
-  0%, 100% { transform: translateY(0) translateZ(var(--z, 60px)); }
-  50% { transform: translateY(-8px) translateZ(var(--z, 60px)); }
+  opacity: 1;
 }
 
 .holo::before {
@@ -525,24 +502,7 @@ main { padding-top: 0; }
 
 /* CRT scan line */
 .char-scanline {
-  position: absolute;
-  left: 4%; right: 4%;
-  height: 3px;
-  background: linear-gradient(to bottom, transparent, color-mix(in oklch, oklch(0.86 0.14 200) 60%, transparent), oklch(0.86 0.14 200), color-mix(in oklch, oklch(0.86 0.14 200) 60%, transparent), transparent);
-  filter: blur(0.5px);
-  box-shadow: 0 0 12px oklch(0.86 0.14 200);
-  transform: translateZ(50px);
-  pointer-events: none;
-  mix-blend-mode: screen;
-  opacity: calc(0.8 * var(--glow, 0.7));
-  top: 0;
-  animation: charScan 5.5s cubic-bezier(0.6, 0, 0.4, 1) infinite;
-}
-@keyframes charScan {
-  0% { top: 8%; opacity: 0; }
-  5% { opacity: 0.95; }
-  95% { opacity: 0.95; }
-  100% { top: 92%; opacity: 0; }
+  display: none;
 }
 
 /* Floor grid */
@@ -642,7 +602,7 @@ main { padding-top: 0; }
 
 .hero-name {
   margin: 0;
-  font: 800 clamp(48px, 12vw, 168px)/0.92 var(--mono);
+  font: 800 clamp(36px, 8vw, 96px)/0.92 var(--mono);
   letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--text);

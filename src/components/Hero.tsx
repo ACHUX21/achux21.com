@@ -398,41 +398,7 @@ export function Hero() {
   const { identity, projects } = portfolio;
   const stageRef = useRef<HTMLDivElement>(null);
 
-  // Mouse parallax
-  useEffect(() => {
-    const heroEl = document.querySelector(".hero") as HTMLElement | null;
-    const inner = stageRef.current?.querySelector(".char-stage-inner") as HTMLElement | null;
-    if (!heroEl || !inner) return;
-    let raf: number;
-    const onMove = (e: MouseEvent) => {
-      const r = heroEl.getBoundingClientRect();
-      const nx = (e.clientX - r.left) / r.width - 0.5;
-      const ny = (e.clientY - r.top) / r.height - 0.5;
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        inner.style.setProperty("--px", nx * -14 + "px");
-        inner.style.setProperty("--py", ny * -8 + "px");
-        inner.style.setProperty("--rx", nx * -2 + "deg");
-        inner.style.setProperty("--ry", ny * 1.4 + "deg");
-      });
-    };
-    const onLeave = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        inner.style.setProperty("--px", "0px");
-        inner.style.setProperty("--py", "0px");
-        inner.style.setProperty("--rx", "0deg");
-        inner.style.setProperty("--ry", "0deg");
-      });
-    };
-    heroEl.addEventListener("mousemove", onMove);
-    heroEl.addEventListener("mouseleave", onLeave);
-    return () => {
-      heroEl.removeEventListener("mousemove", onMove);
-      heroEl.removeEventListener("mouseleave", onLeave);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
+  // Mouse parallax removed — performance
 
   const primaryProject = projects[0];
 
@@ -466,7 +432,7 @@ export function Hero() {
           </div>
 
           <div className="hero-name-wrap">
-            <HeroGlitch name={identity.fullName} isSans={false} />
+            <HeroScan name={identity.fullName} isSans={false} />
           </div>
 
           <HeroStatus lines={identity.statusLines} />
