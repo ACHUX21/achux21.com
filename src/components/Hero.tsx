@@ -335,16 +335,16 @@ const CharacterStage = forwardRef<HTMLDivElement>(function CharacterStage(_, ref
           <circle className="tether-node" cx="62" cy="55" r="0.55" />
           <circle className="tether-node" cx="74" cy="76" r="0.55" />
           <circle className="tether-pulse" r="0.6">
-            <animateMotion dur="3.2s" repeatCount="indefinite" path="M 50,22 C 45,18 40,16 36,13" />
+            <animateMotion dur="1.5s" repeatCount="indefinite" path="M 50,22 C 45,18 40,16 36,13" />
           </circle>
           <circle className="tether-pulse" r="0.6">
-            <animateMotion dur="3.8s" begin="0.7s" repeatCount="indefinite" path="M 60,33 C 68,28 75,24 80,21" />
+            <animateMotion dur="1.8s" begin="0.3s" repeatCount="indefinite" path="M 60,33 C 68,28 75,24 80,21" />
           </circle>
           <circle className="tether-pulse" r="0.6">
-            <animateMotion dur="3.5s" begin="1.4s" repeatCount="indefinite" path="M 36,48 C 32,50 28,53 24,56" />
+            <animateMotion dur="1.7s" begin="0.6s" repeatCount="indefinite" path="M 36,48 C 32,50 28,53 24,56" />
           </circle>
           <circle className="tether-pulse" r="0.6">
-            <animateMotion dur="4.0s" begin="0.3s" repeatCount="indefinite" path="M 62,55 C 68,60 72,68 74,76" />
+            <animateMotion dur="2.0s" begin="0.1s" repeatCount="indefinite" path="M 62,55 C 68,60 72,68 74,76" />
           </circle>
         </svg>
 
