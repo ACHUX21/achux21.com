@@ -1,356 +1,277 @@
-export type Social = {
-  label: string;
-  url: string;
-};
-
-export type ProjectLink = {
-  label: string;
-  url: string;
-};
+export type Social = { label: string; url: string };
+export type ProjectLink = { label: string; url: string };
 
 export type Project = {
-  id: string;
+  num: string;
   title: string;
-  summary: string;
-  description: string;
-  domain: string;
-  outcome: string;
+  tagline: string;
+  desc: string;
   stack: string[];
-  highlights: string[];
-  links: ProjectLink[];
   status: string;
-  featured?: boolean;
+  peek: string[];
 };
 
 export type SkillCategory = {
-  category: string;
-  items: string[];
-};
-
-export type Certification = {
+  icon: string;
+  head: string;
   title: string;
-  issuer: string;
-  date: string;
-  note: string;
-};
-
-export type LinkedinPost = {
-  title: string;
-  url: string;
-  image: string;
-  label: string;
+  items: { name: string; level: number }[];
 };
 
 export type ExperienceEntry = {
-  title: string;
-  organization: string;
-  location: string;
-  period: string;
-  summary: string;
-  highlights: string[];
+  date: string;
+  status?: string;
+  role: string;
+  org: string;
+  desc: string;
+  stack: string[];
 };
 
 export type EducationEntry = {
-  institution: string;
-  degree: string;
-  period: string;
-  location: string;
+  title: string;
+  meta: string;
+  sub: string;
+};
+
+export type CertEntry = {
+  title: string;
+  meta: string;
+  sub: string;
+};
+
+export type LangEntry = {
+  name: string;
+  level: number;
+};
+
+export type TrophyData = {
+  rank: string;
+  count: string;
+  suffix: string;
+  label: string;
+  sub: string;
 };
 
 export type PortfolioContent = {
-  name: string;
-  role: string;
-  tagline: string;
-  heroSummary: string;
-  bio: string[];
-  contactNote: string;
-  email: string;
-  phone: string;
-  location: string;
-  github: string;
-  linkedin: string;
-  blog: string;
-  resumeUrl?: string;
-  socials: Social[];
-  statusLines: string[];
-  currentFocus: string[];
-  experiences: ExperienceEntry[];
+  identity: {
+    fullName: string;
+    handle: string;
+    title: string;
+    location: string;
+    email: string;
+    statusLines: string[];
+  };
+  trophies: TrophyData[];
+  about: {
+    paragraphs: string[];
+    profile: Record<string, string>;
+  };
+  experience: ExperienceEntry[];
   education: EducationEntry[];
-  languages: string[];
+  certs: CertEntry[];
+  langs: LangEntry[];
   projects: Project[];
   skills: SkillCategory[];
-  certifications: Certification[];
-  linkedinPosts: LinkedinPost[];
+  contact: {
+    meta: Record<string, string>;
+  };
 };
 
 export const portfolio: PortfolioContent = {
-  name: "ACHRAF OUAZZANI CHAHIDI",
-  role: "AI Security Student",
-  tagline:
-    "AI security and application security student with hands-on experience in web exploitation, vulnerability research, and security tooling.",
-  heroSummary:
-    "I build security tools that combine static analysis, offensive-security thinking, and AI-assisted detection, grounded in strong Python, C, and systems-level programming foundations.",
-  bio: [
-    "My path into security started with practical labs, Linux tooling, and a strong curiosity about how web applications and networked systems behave under real constraints. That early curiosity became a durable foundation in reconnaissance, vulnerability testing, and careful debugging.",
-    "I later deepened that foundation through software engineering work in C and Python. Projects like a custom shell and printf implementation taught me to reason from system behavior upward rather than relying on abstraction alone.",
-    "Today I am applying that same mindset to AI security and application security. I stay close to real exploitation, active CTF practice, and tool building so research ideas remain grounded in how systems actually fail.",
-  ],
-  contactNote:
-    "I am looking for security engineering, application security, or AI-security opportunities where hands-on testing, systems understanding, and tool building all matter.",
-  email: "21@achux21.com",
-  phone: "+86 135 9131 8052",
-  location: "Dalian, China",
-  github: "https://github.com/ACHUX21",
-  linkedin: "https://www.linkedin.com/in/achux21",
-  blog: "https://blog.achux21.com",
-  resumeUrl: "/achraf-ouazzani-chahidi-resume.pdf",
-  socials: [
-    { label: "GitHub", url: "https://github.com/ACHUX21" },
-    { label: "LinkedIn", url: "https://www.linkedin.com/in/achux21" },
-    { label: "Blog", url: "https://blog.achux21.com" },
-    { label: "CTFTime", url: "https://ctftime.org/team/107202" },
-    { label: "Email", url: "mailto:21@achux21.com" },
-  ],
-  statusLines: [
-    "Building AI-assisted security tooling",
-    "Testing web application behavior",
-    "Writing exploitation notes and writeups",
-    "Exploring static analysis for package risk",
-  ],
-  currentFocus: [
-    "Supply chain security",
-    "Static analysis",
-    "AI-assisted detection",
-    "Application security research",
-  ],
-  experiences: [
+  identity: {
+    fullName: "ACHRAF OUAZZANI CHAHIDI",
+    handle: "achux21",
+    title: "AI Security Engineer",
+    location: "Dalian · CN",
+    email: "21@achux21.com",
+    statusLines: [
+      "auditing model weight provenance chains",
+      "fuzzing a parser written at 03:14 last tuesday",
+      "tracing supply-chain artifacts back to origin",
+      "reading CVE-2025-* over coffee",
+    ],
+  },
+
+  trophies: [
     {
-      title: "Junior Penetration Tester",
-      organization: "Swift IT",
-      location: "Casablanca, Morocco",
-      period: "Jan 2025 - Mar 2025",
-      summary:
-        "Performed authorized web and systems assessments with a focus on validating exploitable behavior and producing clear technical reporting.",
-      highlights: [
-        "Validated issues including SQL injection, XSS, and IDOR during real assessments",
-        "Built a Python tool to automate detection of HTTP request smuggling behavior",
-        "Delivered proof-of-concepts, impact analysis, and remediation guidance",
-      ],
+      rank: "1ST PLACE",
+      count: "3",
+      suffix: "×",
+      label: "International CTF wins",
+      sub: "MCSCv12 · IDEHv6 · AISEC 2025",
+    },
+    {
+      rank: "CERTIFIED",
+      count: "2",
+      suffix: "+",
+      label: "Active certifications",
+      sub: "eJPTv2 · Cisco Networking Academy",
+    },
+    {
+      rank: "DISCLOSED",
+      count: "03",
+      suffix: "",
+      label: "Responsibly reported (prelim)",
+      sub: "Python · HTTP · supply-chain",
     },
   ],
+
+  about: {
+    paragraphs: [
+      "I'm a cybersecurity student splitting time between <mark>offensive research</mark> on web exploitation and the systems plumbing that lets attacks scale. Most weeks I'm reading parser code, the rest I'm writing it.",
+      "Lately: AI-assisted security tooling, static analysis for supply-chain risk, and CTF challenge authoring. I publish what's safe to publish.",
+    ],
+    profile: {
+      Role: "AI Security Student",
+      Studying: "B.Sc. — CS @ DLU",
+      Based: "Dalian, China",
+      Status: "Open to intern · 2026",
+      Stack: "Python · C · Go · Bash",
+      Github: "@ACHUX21",
+      Email: "21@achux21.com",
+    },
+  },
+
+  experience: [
+    {
+      date: "2025 — PRESENT",
+      status: "current",
+      role: "Junior Penetration Tester",
+      org: "Swift IT · Casablanca",
+      desc: "Performed authorized web and systems assessments with a focus on validating exploitable behavior and producing clear technical reporting.",
+      stack: ["Python", "Burp Suite", "SQLi", "XSS"],
+    },
+    {
+      date: "2024 — 2025",
+      role: "Cybersecurity Intern",
+      org: "Independent / CTF Research",
+      desc: "Disclosed issues across web applications. Co-authored CTF challenges. Built a Python tool to automate detection of HTTP request smuggling behavior during assessments.",
+      stack: ["Python", "Nmap", "ffuf", "CTF"],
+    },
+    {
+      date: "2023 — 2024",
+      role: "Technician — Cybersecurity",
+      org: "ISM Cybersecurity Program",
+      desc: "Completed hands-on coursework in network security, Linux administration, and ethical hacking. Built foundational skills in vulnerability assessment and penetration testing.",
+      stack: ["Linux", "Networking", "OWASP", "Metasploit"],
+    },
+  ],
+
   education: [
-    {
-      institution: "Dalian Polytechnic University",
-      degree: "B.Sc. in Computer Science (in progress)",
-      period: "2025 - 2029",
-      location: "Dalian, China",
-    },
-    {
-      institution: "Specialized Institute of Management and Computer Science",
-      degree: "Technician Degree in Cybersecurity",
-      period: "2023 - 2025",
-      location: "Casablanca, Morocco",
-    },
+    { title: "B.Sc. Computer Science", meta: "2025 — 2029", sub: "Dalian Polytechnic University" },
+    { title: "Technician Cybersecurity", meta: "2023 — 2025", sub: "ISM Casablanca · Highest honours" },
   ],
-  languages: [
-    "Arabic (Native)",
-    "English (Fluent)",
-    "French (Fluent)",
-    "Mandarin Chinese (Basic, HSK 1)",
+
+  certs: [
+    { title: "eJPTv2", meta: "2025", sub: "INE · Junior Penetration Tester" },
+    { title: "Cisco Networking", meta: "2024", sub: "CCNA Intro to Networks" },
   ],
+
+  langs: [
+    { name: "Arabic", level: 100 },
+    { name: "English", level: 95 },
+    { name: "French", level: 90 },
+    { name: "Mandarin Chinese", level: 30 },
+  ],
+
   projects: [
     {
-      id: "packguard",
+      num: "01",
       title: "PackGuard",
-      summary:
-        "An AI-powered package security scanner for npm and PyPI focused on spotting malicious packages and supply-chain attacks.",
-      description:
-        "PackGuard combines static analysis, heuristic detection, and local AI models to flag suspicious behavior such as typosquatting patterns and package-level supply-chain risk. It reflects the direction I want to keep pushing in AI-assisted security tooling.",
-      domain: "AI Security",
-      outcome: "Brings static analysis and AI-assisted detection together for package risk review.",
-      stack: ["Python", "Static Analysis", "AI", "Supply Chain Security"],
-      highlights: [
-        "Targets malicious-package patterns in npm and PyPI ecosystems",
-        "Uses heuristic detection alongside local AI models",
-        "Focused on typosquatting and supply-chain abuse scenarios",
+      tagline: "AI-powered package security scanner",
+      desc: "A static analyzer that combines heuristic detection and local AI models to flag malicious packages and typosquatting across npm and PyPI. Reflects my push into AI-assisted security tooling.",
+      stack: ["Python", "AI", "Static Analysis"],
+      status: "active",
+      peek: [
+        "Heuristic + AI detection pipeline",
+        "Targets npm and PyPI ecosystems",
+        "Typosquatting and supply-chain patterns",
+        "Local inference, no external API",
       ],
-      links: [{ label: "GitHub Profile", url: "https://github.com/ACHUX21" }],
-      status: "Current Focus",
-      featured: true,
     },
     {
-      id: "http-request-smuggling-detector",
+      num: "02",
       title: "HTTP Request Smuggling Detector",
-      summary:
-        "A Python tool that automates crafted-request testing for HTTP desynchronization behavior during web assessments.",
-      description:
-        "Built to speed up manual verification during testing engagements, this project focuses on helping surface request-smuggling behavior with less repeated setup. It reflects my interest in subtle protocol behavior and offensive tooling that saves analyst time.",
-      domain: "Application Security",
-      outcome: "Reduced manual overhead while validating HTTP desynchronization issues.",
-      stack: ["Python", "HTTP", "AppSec", "Security Tooling"],
-      highlights: [
-        "Automates crafted-request testing for request smuggling checks",
-        "Supports faster validation during web-application assessments",
-        "Built from real engagement needs rather than as a toy demo",
+      tagline: "Desync-fuzzing automation tool",
+      desc: "A Python tool that automates crafted-request testing for HTTP desynchronization behavior during web assessments. Built from real engagement needs instead of toy scenarios.",
+      stack: ["Python", "HTTP", "AppSec"],
+      status: "active",
+      peek: [
+        "Automates request-smuggling checks",
+        "Reduces manual testing overhead",
+        "Built from real engagement needs",
       ],
-      links: [{ label: "GitHub Profile", url: "https://github.com/ACHUX21" }],
-      status: "Recent Build",
-      featured: true,
     },
     {
-      id: "vulnerability-scanner-suite",
+      num: "03",
       title: "Vulnerability Scanner Suite",
-      summary:
-        "A collection of Python and Bash utilities for reconnaissance, endpoint discovery, and lightweight fuzzing.",
-      description:
-        "This toolkit is designed to support faster application-security workflows by reducing repetition during early-stage testing. It reflects the kind of practical automation that becomes valuable across repeated lab and assessment work.",
-      domain: "Security Automation",
-      outcome: "Improved speed and repeatability during web testing workflows.",
-      stack: ["Python", "Bash", "Reconnaissance", "Fuzzing"],
-      highlights: [
-        "Utilities for endpoint discovery and lightweight fuzzing",
-        "Focus on repeatable workflows instead of one-off scripts",
-        "Supports reconnaissance and validation during web testing",
+      tagline: "Reconnaissance & fuzzing toolkit",
+      desc: "Collection of Python and Bash utilities for endpoint discovery, recon, and lightweight fuzzing. Designed to speed up early-stage web testing workflows.",
+      stack: ["Python", "Bash", "Recon"],
+      status: "active",
+      peek: [
+        "Endpoint discovery + fuzzing utils",
+        "Focus on repeatable workflows",
+        "Designed for appsec testing speed",
       ],
-      links: [{ label: "GitHub Profile", url: "https://github.com/ACHUX21" }],
-      status: "Active",
-      featured: true,
     },
     {
-      id: "simple-shell",
+      num: "04",
       title: "Custom Shell in C",
-      summary:
-        "A Unix-like shell built in C to understand command parsing, process management, and execution flow.",
-      description:
-        "Building the shell from scratch strengthened my understanding of system behavior, parsing discipline, child processes, and the limits of low-level tooling. It remains one of the clearest examples of how I learn by implementing fundamentals directly.",
-      domain: "Systems Programming",
-      outcome: "Built a functional shell and strengthened core systems reasoning.",
-      stack: ["C", "Unix", "Linux", "System Programming"],
-      highlights: [
+      tagline: "Unix-like shell from scratch",
+      desc: "Built to deepen understanding of command parsing, process management, and execution flow. One of the clearest examples of learning by implementing fundamentals directly.",
+      stack: ["C", "Unix", "Linux"],
+      status: "completed",
+      peek: [
         "Custom command execution pipeline",
-        "Argument parsing and process lifecycle control",
-        "Hands-on debugging of low-level behavior",
+        "Process lifecycle control",
+        "Hands-on low-level debugging",
       ],
-      links: [{ label: "Repository", url: "https://github.com/ACHUX21/simple_shell" }],
-      status: "Completed",
-      featured: true,
-    },
-    {
-      id: "imperial-petroleum-pos",
-      title: "Imperial Petroleum POS",
-      summary:
-        "A Flask and MySQL web application used to deepen understanding of authentication, sessions, and input validation in realistic workflows.",
-      description:
-        "This project combined backend structure, authentication flows, and operational logic in a more product-like setting. It was especially useful for understanding how real application logic creates both engineering and security constraints.",
-      domain: "Full-Stack Web",
-      outcome: "Applied security-aware thinking to a realistic academic web application.",
-      stack: ["Flask", "MySQL", "Jinja2", "Authentication"],
-      highlights: [
-        "Worked through authentication and session-handling flows",
-        "Used database-backed application logic in realistic scenarios",
-        "Improved understanding of validation and trust boundaries",
-      ],
-      links: [{ label: "Repository", url: "https://github.com/ACHUX21/SEINFA-Project" }],
-      status: "Completed",
-      featured: false,
     },
   ],
+
   skills: [
     {
-      category: "Programming",
-      items: ["Python", "C", "Bash", "JavaScript"],
+      icon: "⌗",
+      head: "OFFENSIVE",
+      title: "Offensive Security",
+      items: [
+        { name: "Web Exploitation", level: 82 },
+        { name: "SQLi / XSS / SSRF", level: 78 },
+        { name: "Reconnaissance", level: 85 },
+        { name: "CTF Challenge Solving", level: 80 },
+      ],
     },
     {
-      category: "Security",
-      items: ["Web Exploitation", "SQLi", "XSS", "SSRF", "IDOR", "Application Security", "OWASP"],
+      icon: "{}",
+      head: "SYSTEMS",
+      title: "Systems & Tooling",
+      items: [
+        { name: "Python", level: 90 },
+        { name: "C", level: 70 },
+        { name: "Bash / Linux", level: 82 },
+        { name: "Burp Suite / Nmap", level: 78 },
+      ],
     },
     {
-      category: "AI Security",
-      items: ["Supply Chain Security", "Static Analysis", "AI-Assisted Detection"],
-    },
-    {
-      category: "Tools",
-      items: ["Burp Suite", "Nmap", "ffuf", "sqlmap", "Metasploit", "Docker", "Linux"],
-    },
-    {
-      category: "Security Research",
-      items: ["CTF Writeups", "Challenge Authoring", "Vulnerability Research", "Technical Reporting"],
+      icon: "∆",
+      head: "AI / ML SEC",
+      title: "AI & ML Security",
+      items: [
+        { name: "Supply Chain Security", level: 75 },
+        { name: "Static Analysis", level: 80 },
+        { name: "AI-Assisted Detection", level: 73 },
+        { name: "Security Tool Building", level: 85 },
+      ],
     },
   ],
-  certifications: [
-    {
-      title: "eJPTv2",
-      issuer: "INE",
-      date: "Certified",
-      note: "Practical junior penetration testing certification with emphasis on hands-on offensive skills.",
+
+  contact: {
+    meta: {
+      EMAIL: "21@achux21.com",
+      GITHUB: "github.com/ACHUX21",
+      LINKEDIN: "linkedin.com/in/achux21",
+      TIMEZONE: "UTC+8 (CST)",
     },
-    {
-      title: "Cisco Networking Academy Coursework",
-      issuer: "Cisco Networking Academy",
-      date: "Completed",
-      note: "Completed Introduction to Networks and Switching & Routing coursework.",
-    },
-    {
-      title: "MCSCv12 CTF 2025 - 1st Place",
-      issuer: "CTF Competition",
-      date: "2025",
-      note: "First-place finish in MCSCv12 CTF 2025.",
-    },
-    {
-      title: "IDEHv6 CTF 2025 - 1st Place",
-      issuer: "CTF Competition",
-      date: "2025",
-      note: "First-place finish in IDEHv6 CTF 2025.",
-    },
-    {
-      title: "AISEC CTF 2025 - 1st Place",
-      issuer: "CTF Competition",
-      date: "2025",
-      note: "First-place finish in AISEC CTF 2025.",
-    },
-    {
-      title: "Top 15 - HTB Cyber Apocalypse 2024",
-      issuer: "Team L3ak",
-      date: "2024",
-      note: "Placed in the top 15 with Team L3ak during HTB Cyber Apocalypse 2024.",
-    },
-    {
-      title: "Cyber Odyssey CTF 2024 - 2nd Place",
-      issuer: "CTF Competition",
-      date: "2024",
-      note: "Second-place finish in Cyber Odyssey CTF 2024.",
-    },
-  ],
-  linkedinPosts: [
-    {
-      title: "AISEC CTF 2025 - 1st Place",
-      url: "https://lnkd.in/p/eR5RrN28",
-      image: "/images/ensa_kech.jpg",
-      label: "View on LinkedIn",
-    },
-    {
-      title: "IDEHv6 CTF 2025 - 1st Place",
-      url: "https://lnkd.in/p/eMeuEvzd",
-      image: "/images/ideh.jpg",
-      label: "View on LinkedIn",
-    },
-    {
-      title: "MCSCv12 CTF 2025 - 1st Place",
-      url: "https://lnkd.in/p/eFRsxUCH",
-      image: "/images/ensias.jpg",
-      label: "View on LinkedIn",
-    },
-    {
-      title: "Cyber Odyssey CTF 2024 - 2nd Place",
-      url: "https://lnkd.in/p/eySUR32K",
-      image: "/images/odyssey.jpg",
-      label: "View on LinkedIn",
-    },
-    {
-      title: "0xGCD CTF 2024 - Hosting",
-      url: "https://lnkd.in/p/e9akjiwf",
-      image: "/images/org_ensa.jpg",
-      label: "View on LinkedIn",
-    },
-  ],
+  },
 };

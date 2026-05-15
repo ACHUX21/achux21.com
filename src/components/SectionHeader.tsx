@@ -1,17 +1,18 @@
-type SectionHeaderProps = {
-  eyebrow: string;
+type Props = {
+  num: string;
   title: string;
-  description: string;
+  desc?: string;
 };
 
-export function SectionHeader({ eyebrow, title, description }: SectionHeaderProps) {
+export function SectionHeader({ num, title, desc }: Props) {
   return (
-    <header className="mb-6">
-      <p className="mb-2 text-[0.74rem] uppercase tracking-[0.22em] text-[var(--color-accent-soft)]">
-        {eyebrow}
-      </p>
-      <h2 className="mt-0 text-[clamp(1.6rem,3vw,3rem)] font-medium">{title}</h2>
-      <p className="max-w-2xl text-[var(--color-text-dim)] leading-relaxed">{description}</p>
-    </header>
+    <>
+      <div className="section-head">
+        <span className="section-num">{num}</span>
+        <h2 className="section-title">{title}</h2>
+        <span className="section-rule"></span>
+      </div>
+      {desc && <p className="section-desc">{desc}</p>}
+    </>
   );
 }
