@@ -1,0 +1,101 @@
+\documentclass[10pt,letterpaper]{article}
+
+\usepackage[margin=0.6in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{parskip}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.2em, itemsep=0.2em, topsep=0.3em}
+
+\definecolor{resumeblue}{HTML}{0F3B5C}
+\definecolor{resumegrey}{HTML}{4A5560}
+
+\titleformat{\section}{\large\bfseries\color{resumeblue}}{}{0em}{}[\titlerule]
+\titlespacing*{\section}{0pt}{0.7em}{0.45em}
+
+\newcommand{\resumeheader}[1]{
+  {\fontsize{22}{24}\selectfont\bfseries\color{resumeblue} #1}
+}
+
+\newcommand{\entry}[4]{
+  \textbf{#1} \hfill \textbf{#2} \\
+  {\color{resumegrey} #3} \hfill {\color{resumegrey} #4} \\
+}
+
+\begin{document}
+
+\resumeheader{Achraf Ouazzani Chahidi}
+
+{\color{resumeblue}\textbf{AI Security | Offensive Security | Application Security}} \\
+\href{mailto:21@achux21.com}{21@achux21.com} \,|\, +86 135 9131 8052 \,|\, Dalian, China \\
+\href{https://achux21.com}{achux21.com} \,|\, \href{https://github.com/ACHUX21}{github.com/ACHUX21} \,|\, \href{https://www.linkedin.com/in/achux21}{linkedin.com/in/achux21}
+
+\section*{Summary}
+AI security and application security student with hands-on experience in web exploitation, vulnerability research, and security tooling. Active CTF competitor with multiple first-place finishes and challenge-authoring experience. Building security tools that combine static analysis, offensive-security thinking, and AI-assisted detection, grounded in strong Python, C, and systems-level programming foundations.
+
+\section*{Experience}
+\entry{Junior Penetration Tester}{Jan 2025 -- Mar 2025}{Swift IT}{Casablanca, Morocco}
+\begin{itemize}
+  \item Performed authorized web and systems assessments focused on validating exploitable behavior and producing clear technical reporting.
+  \item Validated issues including SQL injection, XSS, and IDOR during real assessments.
+  \item Built a Python tool to automate detection of HTTP request smuggling behavior during engagements.
+  \item Delivered proof-of-concepts, impact analysis, and remediation guidance.
+\end{itemize}
+
+\section*{Projects}
+\textbf{PackGuard} \hfill {\color{resumegrey} AI Security} \\
+AI-powered package security scanner for npm and PyPI focused on malicious-package detection, typosquatting patterns, and supply-chain risk review using static analysis, heuristic detection, and local AI models.
+
+\vspace{0.4em}
+\textbf{HTTP Request Smuggling Detector} \hfill {\color{resumegrey} Application Security} \\
+Python tool that automates crafted-request testing for HTTP desynchronization behavior and reduces manual overhead during web assessments.
+
+\vspace{0.4em}
+\textbf{Vulnerability Scanner Suite} \hfill {\color{resumegrey} Security Automation} \\
+Collection of Python and Bash utilities for reconnaissance, endpoint discovery, and lightweight fuzzing that improves speed and repeatability in web testing workflows.
+
+\vspace{0.4em}
+\textbf{Custom Shell in C} \hfill {\color{resumegrey} Systems Programming} \\
+Unix-like shell built in C to understand parsing, process management, execution flow, and low-level debugging.
+
+\section*{Security Research \& Community}
+\begin{itemize}
+  \item Published 10+ writeups covering SSRF, SSTI, SQLi, JWT, and RCE at \href{https://blog.achux21.com}{blog.achux21.com}.
+  \item Active CTF competitor with AKASEC and multiple top placements across 2024 and 2025 events.
+  \item Designed and authored web exploitation challenges for multiple CTF competitions.
+\end{itemize}
+
+\section*{Achievements \& Certifications}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X>{\raggedleft\arraybackslash}p{1.9in}@{}}
+eJPTv2, INE & Certified \\
+Cisco Networking Academy Coursework & Completed \\
+MCSCv12 CTF 2025 -- 1st Place & 2025 \\
+IDEHv6 CTF 2025 -- 1st Place & 2025 \\
+AISEC CTF 2025 -- 1st Place & 2025 \\
+Cyber Odyssey CTF 2024 -- 2nd Place & 2024 \\
+HTB Cyber Apocalypse 2024 -- Top 15 (Team L3ak) & 2024 \\
+\end{tabularx}
+
+\section*{Education}
+\entry{B.Sc. in Computer Science (in progress)}{2025 -- 2029}{Dalian Polytechnic University}{Dalian, China}
+\entry{Technician Degree in Cybersecurity}{2023 -- 2025}{Specialized Institute of Management and Computer Science}{Casablanca, Morocco}
+
+\section*{Skills}
+\textbf{Programming:} Python, C, Bash, JavaScript \\
+\textbf{Security:} Web Exploitation, SQLi, XSS, SSRF, IDOR, Application Security, OWASP \\
+\textbf{AI Security:} Supply Chain Security, Static Analysis, AI-Assisted Detection \\
+\textbf{Tools:} Burp Suite, Nmap, ffuf, sqlmap, Metasploit, Docker, Linux \\
+\textbf{Research:} CTF Writeups, Challenge Authoring, Vulnerability Research, Technical Reporting
+
+\section*{Languages}
+Arabic (Native), English (Fluent), French (Fluent), Mandarin Chinese (Basic, HSK 1)
+
+\end{document}
